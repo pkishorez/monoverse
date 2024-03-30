@@ -1,18 +1,19 @@
 // eslint-disable-next-line import/no-internal-modules
 import * as trpcExpress from "@trpc/server/adapters/express";
 import { appRouter } from "./trpc";
-import ViteExpress from "vite-express";
 import express from "express";
+import cors from "cors";
 
 const app = express();
 
+app.use(cors());
 app.use(
   "/api",
   trpcExpress.createExpressMiddleware({
     router: appRouter,
-  })
+  }),
 );
 
-ViteExpress.listen(app, 5173, () => {
-  console.log("Server listening... http://localhost:5173/");
+app.listen(21212, () => {
+  console.log("Server listening... http://localhost:21212/");
 });

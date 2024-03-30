@@ -26,6 +26,6 @@
     },
     "types": ["./types/fixturez.d.ts", "vitest/globals"]
   },
-  "include": ["src", "domain", "trpc"],
+  "include": ["src", "domain", "trpc", "components"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

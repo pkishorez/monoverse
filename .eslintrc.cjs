@@ -7,6 +7,7 @@ module.exports = {
     "plugin:react-hooks/recommended",
 
     "plugin:import/recommended",
+    "plugin:tailwindcss/recommended",
     "plugin:import/typescript",
   ],
   ignorePatterns: ["dist", ".eslintrc.cjs"],
@@ -22,7 +23,14 @@ module.exports = {
     "import/no-internal-modules": [
       "error",
       {
-        allow: ["react-dom/client", "~/*"],
+        allow: [
+          "react-dom/client",
+          "~/*",
+          "~/components/utils",
+          "~/components/ui/*",
+          "~/components/*",
+          "~/src/client",
+        ],
       },
     ],
     "react-refresh/only-export-components": [

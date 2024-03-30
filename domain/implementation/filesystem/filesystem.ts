@@ -9,6 +9,7 @@ export const getMonorepoInfo = (dirPath: string) => {
   const workspaceDir = detectWorkspaceDir(dirPath);
 
   if (monorepoDir) {
+    console.log("MONOREPO", dirPath);
     const workspaces = getMonorepoWorkspacesAtDir(monorepoDir)!;
     invariant(workspaces !== undefined, "monorepo should be defined");
 
@@ -18,6 +19,8 @@ export const getMonorepoInfo = (dirPath: string) => {
   } else if (workspaceDir) {
     const workspace = getWorkspaceAtDir(workspaceDir);
     invariant(workspace !== undefined, "workspace should be defined");
+
+    console.log({ workspaceDir });
 
     return {
       workspaces: [workspace],
@@ -53,16 +56,16 @@ function getMonorepoWorkspacesAtDir(dir: string) {
   });
 }
 
-function detectWorkspaceDir(dir: string): string | undefined {
+function detectWorkspaceDir(dirPath: string): string | undefined {
   // eslint-disable-next-line no-constant-condition
   while (true) {
-    const workspace = getWorkspaceAtDir(dir);
-    if (workspace) return dir;
+    const workspace = getWorkspaceAtDir(dirPath);
+    if (workspace) return dirPath;
 
-    const parentDir = path.dirname(dir);
-    if (parentDir === dir) return undefined;
+    const parentDir = path.dirname(dirPath);
+    if (parentDir === dirPath) return undefined;
 
-    dir = parentDir;
+    dirPath = parentDir;
   }
 }
 
@@ -71,12 +74,9 @@ function getWorkspaceAtDir(dir: string) {
 
   try {
     const packageJson = JSON.parse(
-      fs.readFileSync(workspacePackageJson, "utf-8")
+      fs.readFileSync(workspacePackageJson, "utf-8"),
     );
-    return {
-      location: dir,
-      ...transformPackageJsonToWorkspace(packageJson),
-    };
+    return transformPackageJsonToWorkspace(packageJson);
   } catch {
     return undefined;
   }
