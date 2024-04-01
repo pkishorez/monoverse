@@ -1,5 +1,5 @@
 import { groupBy, uniq } from "lodash-es";
-import { Dependency } from "./columns";
+import { Dependency } from "./data-table/columns";
 
 const dependencyGroups = (dependencies: Dependency[]) =>
   Object.entries(

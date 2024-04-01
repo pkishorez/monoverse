@@ -1,4 +1,4 @@
-export { columns } from "./columns";
-export { DataTable } from "./data-table";
+export { DataTable, columns } from "./data-table";
 
+export { FixSyncDependency } from "./fix-sync-modal";
 export { getOutofSyncDependencies } from "./utils";
