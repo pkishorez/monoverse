@@ -1,11 +1,17 @@
 "use client";
 
-import { ColumnDef } from "@tanstack/react-table";
-import { take } from "lodash-es";
-import invariant from "tiny-invariant";
-import { z } from "zod";
+import { createColumnHelper } from "@tanstack/react-table";
+import { uniq } from "lodash-es";
 import { Badge } from "~/components/ui/badge";
+import { Button } from "~/components/ui/button";
 import { TrpcRouterOutputs } from "~/src/client";
+
+declare module "@tanstack/react-table" {
+  // @ts-expect-error - To avoid error.
+  interface TableMeta {
+    onSyncFix: (depName: string) => void;
+  }
+}
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -14,36 +20,49 @@ export type Dependency = Exclude<
   null
 >[number];
 
-export const columns: ColumnDef<Dependency>[] = [
-  {
-    accessorKey: "name",
-    header: () => <div>Dependency Name</div>,
-    cell: ({ row }) => {
-      return <div>{row.getValue("name")}</div>;
-    },
-  },
-  {
-    id: "workspaces",
-    accessorFn: ({ workspaces }) =>
-      workspaces.map((workspace) => workspace.name),
-    header: () => <div>Workspaces</div>,
-    cell: ({ row }) => {
-      const workspaces = z
-        .array(z.string())
-        .safeParse(row.getValue("workspaces"));
+const columnHelper = createColumnHelper<Dependency>();
 
-      invariant(workspaces.success, "workspaces should be an array of strings");
+export const columns = [
+  columnHelper.accessor("dependencyName", {
+    header: () => <div>Dependency</div>,
+    aggregationFn: "count",
+  }),
+  columnHelper.accessor("workspaceName", {
+    header: () => <div>Workspace</div>,
+    cell: (info) => info.getValue(),
+    aggregationFn: "count",
+  }),
+  columnHelper.accessor("versionRange", {
+    enableGrouping: false,
+    header: () => <div>Version</div>,
+    cell: (info) => <Badge variant="outline">{info.getValue()}</Badge>,
 
-      return (
-        <div>
-          {take(workspaces.data, 3).map((name) => (
-            <Badge key={name}>{name}</Badge>
-          ))}
-          {workspaces.data.length > 3 && (
-            <Badge>+{workspaces.data.length - 3}</Badge>
-          )}
-        </div>
-      );
+    aggregatedCell: ({ row, table }) => {
+      const sameDep =
+        uniq(row.subRows.map((v) => v.original.dependencyName)).length === 1;
+      const sameVersion =
+        uniq(row.subRows.map((v) => v.original.versionRange)).length === 1;
+
+      if (!sameDep) {
+        return "-";
+      }
+      if (sameDep && !sameVersion) {
+        return (
+          <div className="flex flex-nowrap items-center gap-2">
+            <div className="text-nowrap">⛔️ Mixed</div>
+            <Button
+              variant="destructive"
+              className="h-auto py-1"
+              size="sm"
+              onClick={() =>
+                table.options.meta?.onSyncFix(row.original.dependencyName)
+              }
+            >
+              FIX
+            </Button>
+          </div>
+        );
+      }
     },
-  },
+  }),
 ];

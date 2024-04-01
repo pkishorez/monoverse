@@ -16,16 +16,11 @@ import { Route as rootRoute } from './routes/__root'
 
 // Create Virtual Routes
 
-const OverviewLazyImport = createFileRoute('/overview')()
 const IndexLazyImport = createFileRoute('/')()
 const SyncIndexLazyImport = createFileRoute('/sync/')()
+const OverviewIndexLazyImport = createFileRoute('/overview/')()
 
 // Create/Update Routes
-
-const OverviewLazyRoute = OverviewLazyImport.update({
-  path: '/overview',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/overview.lazy').then((d) => d.Route))
 
 const IndexLazyRoute = IndexLazyImport.update({
   path: '/',
@@ -37,6 +32,13 @@ const SyncIndexLazyRoute = SyncIndexLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/sync/index.lazy').then((d) => d.Route))
 
+const OverviewIndexLazyRoute = OverviewIndexLazyImport.update({
+  path: '/overview/',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/overview/index.lazy').then((d) => d.Route),
+)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -45,8 +47,8 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexLazyImport
       parentRoute: typeof rootRoute
     }
-    '/overview': {
-      preLoaderRoute: typeof OverviewLazyImport
+    '/overview/': {
+      preLoaderRoute: typeof OverviewIndexLazyImport
       parentRoute: typeof rootRoute
     }
     '/sync/': {
@@ -60,7 +62,7 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren([
   IndexLazyRoute,
-  OverviewLazyRoute,
+  OverviewIndexLazyRoute,
   SyncIndexLazyRoute,
 ])
 

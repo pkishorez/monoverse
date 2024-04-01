@@ -7,31 +7,23 @@ export const getSyncUpdates = (dirPath: string) => {
     return null;
   }
 
-  const depMap: Record<
-    string,
-    {
-      name: string;
-      workspaces: {
-        name: string;
-        versionRange: string;
-      }[];
-    }
-  > = {};
+  const workspaceMap = monorepoInfo.workspaces.reduce(
+    (acc, workspace) => {
+      acc[workspace.name] = true;
+      return acc;
+    },
+    {} as Record<string, boolean>,
+  );
 
-  monorepoInfo.workspaces.forEach((workspace) => {
-    workspace.dependencies.forEach((dep) => {
-      if (!depMap[dep.name]) {
-        depMap[dep.name] = {
-          name: dep.name,
-          workspaces: [],
-        };
-      }
-      depMap[dep.name].workspaces.push({
-        name: workspace.name,
-        versionRange: dep.versionRange,
-      });
+  return monorepoInfo.workspaces.flatMap((workspace) => {
+    return workspace.dependencies.map((dependency) => {
+      return {
+        dependencyName: dependency.name,
+        dependencyType: dependency.type,
+        workspaceName: workspace.name,
+        versionRange: dependency.versionRange,
+        isInternalDependency: !!workspaceMap[dependency.name],
+      };
     });
   });
-
-  return Object.values(depMap);
 };

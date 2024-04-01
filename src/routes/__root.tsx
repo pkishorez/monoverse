@@ -15,14 +15,14 @@ function RootComponent() {
           <div className="mt-10">
             <Link to="/overview">
               {({ isActive }) => (
-                <Button disabled={isActive} className="-ml-4" variant="link">
+                <Button disabled={isActive} className="-ml-4" variant="ghost">
                   Overview
                 </Button>
               )}
             </Link>
             <Link to="/sync">
               {({ isActive }) => (
-                <Button disabled={isActive} variant="link">
+                <Button disabled={isActive} variant="ghost">
                   Sync
                 </Button>
               )}
