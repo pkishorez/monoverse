@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { getOverview, getSyncUpdates } from "./functionality";
+import { getOverview, getSyncUpdates, syncVersions } from "./functionality";
 import { publicProcedure, router } from "./setup";
 
 export const appRouter = router({
@@ -14,6 +14,24 @@ export const appRouter = router({
     .input(z.string())
     .query(async ({ input: dirPath }) => {
       const result = getSyncUpdates(dirPath);
+
+      return result;
+    }),
+
+  syncDependencies: publicProcedure
+    .input(
+      z.object({
+        dirPath: z.string(),
+        updates: z.array(
+          z.object({
+            dependencyName: z.string(),
+            versionRange: z.string(),
+          }),
+        ),
+      }),
+    )
+    .mutation(async ({ input }) => {
+      const result = syncVersions(input.dirPath, input.updates);
 
       return result;
     }),

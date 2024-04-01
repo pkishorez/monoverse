@@ -1,6 +1,7 @@
+export { packageJsonSchema } from './schema.js';
 export {
   transformPackageJsonToWorkspace,
-  transformToMonorepo,
+  transformToMonorepo
 } from "./transform.js";
 
 export type { Monorepo, Workspace } from "./types.js";

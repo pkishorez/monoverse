@@ -8,14 +8,14 @@ export const getSyncUpdates = (dirPath: string) => {
   }
 
   const workspaceMap = monorepoInfo.workspaces.reduce(
-    (acc, workspace) => {
+    (acc, { workspace }) => {
       acc[workspace.name] = true;
       return acc;
     },
     {} as Record<string, boolean>,
   );
 
-  return monorepoInfo.workspaces.flatMap((workspace) => {
+  return monorepoInfo.workspaces.flatMap(({ workspace }) => {
     return workspace.dependencies.map((dependency) => {
       return {
         dependencyName: dependency.name,

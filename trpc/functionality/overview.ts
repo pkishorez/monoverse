@@ -8,14 +8,14 @@ export const getOverview = (dirPath: string) => {
   }
 
   const workspacesMap = monorepoInfo.workspaces.reduce(
-    (acc, workspace) => {
+    (acc, { workspace }) => {
       acc[workspace.name] = workspace;
       return acc;
     },
-    {} as Record<string, (typeof monorepoInfo.workspaces)[0]>,
+    {} as Record<string, (typeof monorepoInfo.workspaces)[0]["workspace"]>,
   );
 
-  const dependencyLinks = monorepoInfo.workspaces.map((workspace) => {
+  const dependencyLinks = monorepoInfo.workspaces.map(({ workspace }) => {
     const internalDependencies = workspace.dependencies
       .filter((dep) => !!workspacesMap[dep.name])
       .map((v) => v.name);

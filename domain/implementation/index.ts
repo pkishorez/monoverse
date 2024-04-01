@@ -1,2 +1,3 @@
 export { fetchBundleInfo, fetchPackageInfo } from "./api";
-export { getMonorepoInfo } from "./filesystem";
+export { getMonorepoInfo, syncDependencyVersions } from "./filesystem";
+

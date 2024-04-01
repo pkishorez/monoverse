@@ -23,14 +23,16 @@ export const monorepoSchema = z.object({
 
 const dependencyRecordSchema = z.record(z.string());
 
-export const packageJsonSchema = z.object({
-  name: z.string(),
-  description: z.string().optional(),
-  version: z.string().optional(),
+export const packageJsonSchema = z
+  .object({
+    name: z.string(),
+    description: z.string().optional(),
+    version: z.string().optional(),
 
-  // Dependencies
-  dependencies: dependencyRecordSchema.optional(),
-  devDependencies: dependencyRecordSchema.optional(),
-  peerDependencies: dependencyRecordSchema.optional(),
-  optionalDependencies: dependencyRecordSchema.optional(),
-});
+    // Dependencies
+    dependencies: dependencyRecordSchema.optional(),
+    devDependencies: dependencyRecordSchema.optional(),
+    peerDependencies: dependencyRecordSchema.optional(),
+    optionalDependencies: dependencyRecordSchema.optional(),
+  })
+  .passthrough();

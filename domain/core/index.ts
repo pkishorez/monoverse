@@ -1,4 +1,8 @@
-export { transformPackageJsonToWorkspace, transformToMonorepo } from "./schema";
+export {
+  packageJsonSchema,
+  transformPackageJsonToWorkspace,
+  transformToMonorepo,
+} from "./schema";
 export type { Monorepo, Workspace } from "./schema";
 export {
   getMaxVersion,

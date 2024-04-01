@@ -2,6 +2,7 @@ import { getPackages as getWorkspaces } from "@monorepo-utils/package-utils";
 import fs from "fs";
 import path from "path";
 import invariant from "tiny-invariant";
+import { packageJsonSchema } from "~/domain";
 import { transformPackageJsonToWorkspace } from "../../core";
 
 export const getMonorepoInfo = (dirPath: string) => {
@@ -9,7 +10,6 @@ export const getMonorepoInfo = (dirPath: string) => {
   const workspaceDir = detectWorkspaceDir(dirPath);
 
   if (monorepoDir) {
-    console.log("MONOREPO", dirPath);
     const workspaces = getMonorepoWorkspacesAtDir(monorepoDir)!;
     invariant(workspaces !== undefined, "monorepo should be defined");
 
@@ -19,8 +19,6 @@ export const getMonorepoInfo = (dirPath: string) => {
   } else if (workspaceDir) {
     const workspace = getWorkspaceAtDir(workspaceDir);
     invariant(workspace !== undefined, "workspace should be defined");
-
-    console.log({ workspaceDir });
 
     return {
       workspaces: [workspace],
@@ -50,9 +48,16 @@ function getMonorepoWorkspacesAtDir(dir: string) {
   if (!workspaces || workspaces.length === 0) return undefined;
 
   return workspaces.map((workspace) => {
-    const { packageJSON } = workspace;
+    const { packageJSON, location } = workspace;
 
-    return transformPackageJsonToWorkspace(packageJSON);
+    const parsedPackageJson = packageJsonSchema.parse(packageJSON);
+    console.log(JSON.stringify({ packageJSON, parsedPackageJson }, null, "  "));
+
+    return {
+      workspace: transformPackageJsonToWorkspace(packageJSON),
+      location,
+      packageJSON: parsedPackageJson,
+    };
   });
 }
 
@@ -76,7 +81,13 @@ function getWorkspaceAtDir(dir: string) {
     const packageJson = JSON.parse(
       fs.readFileSync(workspacePackageJson, "utf-8"),
     );
-    return transformPackageJsonToWorkspace(packageJson);
+    const parsedPackageJson = packageJsonSchema.parse(packageJson);
+
+    return {
+      location: dir,
+      packageJSON: parsedPackageJson,
+      workspace: transformPackageJsonToWorkspace(packageJson),
+    };
   } catch {
     return undefined;
   }

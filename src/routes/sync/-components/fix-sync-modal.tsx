@@ -15,8 +15,10 @@ import { getOutofSyncDependencies } from "./utils";
 
 export const FixSyncDependency = ({
   fixSyncInfo,
+  onFix,
 }: {
   fixSyncInfo?: ReturnType<typeof getOutofSyncDependencies>[0];
+  onFix: (versionRange: string) => void;
 }) => {
   const [fix, setFix] = useState<string>();
   if (!fixSyncInfo) {
@@ -77,7 +79,15 @@ export const FixSyncDependency = ({
             </div>
           </div>
           <DialogFooter>
-            <Button type="button" disabled={!fix}>
+            <Button
+              type="button"
+              disabled={!fix}
+              onClick={() => {
+                if (fix) {
+                  onFix(fix);
+                }
+              }}
+            >
               Mark Changes
             </Button>
           </DialogFooter>
