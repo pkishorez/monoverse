@@ -8,7 +8,7 @@ import { trpc } from "./client";
 
 const queryClient = new QueryClient();
 const trpcClient = trpc.createClient({
-  links: [httpBatchLink({ url: "http://localhost:21212/api" })],
+  links: [httpBatchLink({ url: import.meta.env.VITE_TRPC_API_ROUTE })],
 });
 
 // Import the generated route tree

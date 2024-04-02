@@ -51,7 +51,6 @@ function getMonorepoWorkspacesAtDir(dir: string) {
     const { packageJSON, location } = workspace;
 
     const parsedPackageJson = packageJsonSchema.parse(packageJSON);
-    console.log(JSON.stringify({ packageJSON, parsedPackageJson }, null, "  "));
 
     return {
       workspace: transformPackageJsonToWorkspace(packageJSON),

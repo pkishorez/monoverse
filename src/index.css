@@ -7,6 +7,9 @@
     @apply border-border;
   }
   body {
+    transition:
+      background-color 0.2s,
+      color 0.2s;
     @apply bg-background text-foreground;
   }
 }

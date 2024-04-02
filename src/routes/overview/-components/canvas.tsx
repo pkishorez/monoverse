@@ -48,7 +48,6 @@ export const Canvas = ({
             ].current;
 
           if (!from || !to) {
-            console.log("NOPE");
             return {
               from: [0, 0] as const,
               to: [0, 0] as const,

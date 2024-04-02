@@ -21,8 +21,8 @@
   --radius: 0.3rem;
 
   /* Canvas */
-  --link-from: red;
-  --link-to: black;
+  --link-from: black;
+  --link-to: red;
   --link-generic: black;
 }
 
@@ -48,7 +48,7 @@
   --ring: 142.4 71.8% 29.2%;
 
   /* canvas */
-  --link-to: rgb(255, 40, 40);
   --link-from: white;
+  --link-to: rgb(255, 40, 40);
   --link-generic: white;
 }

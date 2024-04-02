@@ -24,7 +24,11 @@
     "paths": {
       "~/*": ["./*"]
     },
-    "types": ["./types/fixturez.d.ts", "vitest/globals"]
+    "types": [
+      "./types/fixturez.d.ts",
+      "vitest/globals",
+      "./types/vite-env.d.ts"
+    ]
   },
   "include": ["src", "domain", "trpc", "components"],
   "references": [{ "path": "./tsconfig.node.json" }]
