@@ -14,13 +14,17 @@ import {
 import { getOutofSyncDependencies } from "./utils";
 
 export const FixSyncDependency = ({
+  initialFixVersion,
   fixSyncInfo,
   onFix,
 }: {
+  initialFixVersion?: string;
   fixSyncInfo?: ReturnType<typeof getOutofSyncDependencies>[0];
-  onFix: (versionRange: string) => void;
+  onFix: (versionRange?: string) => void;
 }) => {
-  const [fix, setFix] = useState<string>();
+  const [fixVersion, setFixVersion] = useState<string | undefined>(
+    initialFixVersion,
+  );
   if (!fixSyncInfo) {
     return null;
   }
@@ -44,12 +48,12 @@ export const FixSyncDependency = ({
                     <TableRow key={v.workspaceName}>
                       <TableCell>{v.workspaceName}</TableCell>
                       <TableCell>
-                        {fix && fix !== v.versionRange ? (
+                        {fixVersion && fixVersion !== v.versionRange ? (
                           <div className="flex gap-2">
                             <span className="line-through opacity-60">
                               {v.versionRange}
                             </span>
-                            <span className="text-primary">{fix}</span>
+                            <span className="text-primary">{fixVersion}</span>
                           </div>
                         ) : (
                           v.versionRange
@@ -68,9 +72,9 @@ export const FixSyncDependency = ({
                 (v) => (
                   <Button
                     variant="secondary"
-                    disabled={fix === v}
+                    disabled={fixVersion === v}
                     key={v}
-                    onClick={() => setFix(v)}
+                    onClick={() => setFixVersion(v)}
                   >
                     {v}
                   </Button>
@@ -80,15 +84,26 @@ export const FixSyncDependency = ({
           </div>
           <DialogFooter>
             <Button
+              variant="secondary"
+              disabled={fixVersion === undefined}
+              onClick={() => setFixVersion(undefined)}
+            >
+              Reset
+            </Button>
+            <Button
               type="button"
-              disabled={!fix}
+              disabled={fixVersion === initialFixVersion}
               onClick={() => {
-                if (fix) {
-                  onFix(fix);
+                if (fixVersion) {
+                  onFix(fixVersion);
                 }
               }}
             >
-              Mark Changes
+              {initialFixVersion
+                ? initialFixVersion === fixVersion
+                  ? "No Changes"
+                  : "Update"
+                : "Fix"}
             </Button>
           </DialogFooter>
         </div>

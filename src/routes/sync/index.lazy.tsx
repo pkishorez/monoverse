@@ -1,6 +1,7 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { GroupingState } from "@tanstack/react-table";
 import { useMemo, useState } from "react";
+import { useReward } from "react-rewards";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Dialog, DialogOverlay } from "~/components/ui/dialog";
@@ -32,23 +33,36 @@ function Sync() {
 
   return (
     <div className="container grow px-0 py-10">
-      <Loaded initialData={data} />
+      <Loaded data={data} />
     </div>
   );
 }
 
 const Loaded = ({
-  initialData,
+  data: data,
 }: {
-  initialData: Exclude<TrpcRouterOutputs["getSyncUpdates"], null>;
+  data: Exclude<TrpcRouterOutputs["getSyncUpdates"], null>;
 }) => {
-  const [data, setData] = useState(initialData);
-  const { isPending, mutate } = trpc.syncDependencies.useMutation();
+  const { reward } = useReward("rewardId", "confetti", {
+    spread: 360,
+    elementCount: 200,
+  });
+  const utils = trpc.useUtils();
+  const { isPending, mutate } = trpc.syncDependencies.useMutation({
+    onSuccess() {
+      utils.getSyncUpdates.invalidate(
+        "/Users/kishorepolamarasetty/CAREER/NUMA/numa-web",
+      );
+    },
+  });
+  const syncErrors = useMemo(() => getOutofSyncDependencies(data), [data]);
+  const filteredData = useMemo(
+    () => syncErrors.flatMap((v) => v.dependencies),
+    [syncErrors],
+  );
   const [grouping, setGrouping] = useState<GroupingState>(["dependencyName"]);
 
-  const syncErrors = useMemo(() => getOutofSyncDependencies(data), [data]);
-
-  const [dependencyFixes, setDependencyFixes] = useState<
+  const [scheduledSyncFixes, setScheduledSyncFixes] = useState<
     Record<string, string>
   >({});
 
@@ -60,29 +74,35 @@ const Loaded = ({
     (v) => v.dependencyName === selectedDependency,
   );
 
-  const scheduledFixCount = Object.keys(dependencyFixes).length;
+  const scheduledFixCount = Object.keys(scheduledSyncFixes).length;
 
   return (
     <div className="flex h-min flex-col gap-4 overflow-auto">
       <div className="flex justify-between">
         <div>
-          <Button
+          <Badge
             className={cn({})}
-            variant={syncErrors.length > 1 ? "destructive" : "outline"}
-            onClick={() => setData(syncErrors.flatMap((v) => v.dependencies))}
+            variant={syncErrors.length > 1 ? "destructive" : "default"}
           >
-            Sync Errors {syncErrors.length}
-          </Button>
+            {syncErrors.length > 0 ? (
+              <span>{syncErrors.length} sync errors.</span>
+            ) : (
+              <span>No sync errors 🚀.</span>
+            )}
+          </Badge>
         </div>
         <div>
           <Button
             variant={scheduledFixCount > 0 ? "default" : "outline" || isPending}
             disabled={scheduledFixCount === 0}
-            className="flex items-center gap-2"
+            className="relative flex items-center gap-2"
             onClick={() => {
+              reward();
+              setScheduledSyncFixes({});
+
               mutate({
                 dirPath: "/Users/kishorepolamarasetty/CAREER/NUMA/numa-web",
-                updates: Object.entries(dependencyFixes).map(
+                updates: Object.entries(scheduledSyncFixes).map(
                   ([dependencyName, versionRange]) => ({
                     dependencyName,
                     versionRange,
@@ -95,15 +115,21 @@ const Loaded = ({
             {scheduledFixCount > 0 && (
               <Badge variant="secondary">{scheduledFixCount}</Badge>
             )}
+            <span
+              id="rewardId"
+              onClick={reward}
+              className="absolute left-1/2 top-1/2"
+            />
           </Button>
         </div>
       </div>
       <div className="overflow-auto">
         <DataTable
+          scheduledSyncFixes={scheduledSyncFixes}
           grouping={grouping}
           setGrouping={setGrouping}
           columns={columns}
-          data={data}
+          data={filteredData}
           onFixSync={setSelectedDependency}
         />
       </div>
@@ -114,18 +140,21 @@ const Loaded = ({
         <DialogOverlay className="bg-background/90" />
         <FixSyncDependency
           key={fixSyncInfo ? "true" : "false"}
+          initialFixVersion={
+            scheduledSyncFixes[fixSyncInfo?.dependencyName ?? ""]
+          }
           fixSyncInfo={fixSyncInfo}
           onFix={(versionRange) => {
             if (!fixSyncInfo) {
               return;
             }
             if (versionRange) {
-              dependencyFixes[fixSyncInfo.dependencyName] = versionRange;
+              scheduledSyncFixes[fixSyncInfo.dependencyName] = versionRange;
             } else {
-              delete dependencyFixes[fixSyncInfo.dependencyName];
+              delete scheduledSyncFixes[fixSyncInfo.dependencyName];
             }
 
-            setDependencyFixes({ ...dependencyFixes });
+            setScheduledSyncFixes({ ...scheduledSyncFixes });
             setSelectedDependency(undefined);
           }}
         />

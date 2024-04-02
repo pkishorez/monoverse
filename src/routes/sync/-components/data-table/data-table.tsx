@@ -25,12 +25,14 @@ interface DataTableProps<TData, TValue> {
   onFixSync: (depName: string) => void;
   grouping: GroupingState;
   setGrouping: OnChangeFn<GroupingState>;
+  scheduledSyncFixes: Record<string, string>;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
   onFixSync,
+  scheduledSyncFixes,
   grouping,
   setGrouping,
 }: DataTableProps<TData, TValue>) {
@@ -50,6 +52,7 @@ export function DataTable<TData, TValue>({
 
     meta: {
       onSyncFix: onFixSync,
+      scheduledSyncFixes: scheduledSyncFixes,
     },
   });
 
@@ -119,7 +122,7 @@ export function DataTable<TData, TValue>({
             table.getRowModel().rows.map((row) => (
               <TableRow
                 key={row.id}
-                className="select-none hover:bg-transparent"
+                className="group select-none hover:bg-transparent"
                 data-state={row.getIsSelected() && "selected"}
               >
                 {row.getVisibleCells().map((cell) => {
