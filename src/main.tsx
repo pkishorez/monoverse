@@ -4,7 +4,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { httpBatchLink } from "@trpc/client";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { trpc } from "./client";
+// eslint-disable-next-line import/no-internal-modules
+import { trpc } from "~/trpc/client";
 
 const queryClient = new QueryClient();
 const trpcClient = trpc.createClient({

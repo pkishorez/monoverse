@@ -6,7 +6,7 @@ import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Dialog, DialogOverlay } from "~/components/ui/dialog";
 import { cn } from "~/components/utils";
-import { TrpcRouterOutputs, trpc } from "~/src/client";
+import { TrpcRouterOutputs, trpc } from "~/trpc/client";
 import {
   DataTable,
   FixSyncDependency,

@@ -1,4 +1,4 @@
-import { TrpcRouterOutputs } from "~/src/client";
+import { TrpcRouterOutputs } from "~/trpc/client";
 
 export const transformOverviewData = (
   data: Exclude<TrpcRouterOutputs["getOverview"], null>,

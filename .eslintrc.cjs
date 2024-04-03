@@ -10,7 +10,7 @@ module.exports = {
     "plugin:tailwindcss/recommended",
     "plugin:import/typescript",
   ],
-  ignorePatterns: ["dist", ".eslintrc.cjs"],
+  ignorePatterns: ["dist", ".eslintrc.cjs", "api/*"],
   parser: "@typescript-eslint/parser",
   plugins: ["@typescript-eslint", "react-refresh"],
   settings: {
@@ -29,7 +29,7 @@ module.exports = {
           "~/components/utils",
           "~/components/ui/*",
           "~/components/*",
-          "~/src/client",
+          "~/trpc/client",
         ],
       },
     ],

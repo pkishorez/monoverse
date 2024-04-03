@@ -1,19 +1,11 @@
 // eslint-disable-next-line import/no-internal-modules
-import * as trpcExpress from "@trpc/server/adapters/express";
-import { appRouter } from "./trpc";
-import express from "express";
 import cors from "cors";
-
-const app = express();
+import app from "./vercel";
 
 app.use(cors());
-app.use(
-  "/api",
-  trpcExpress.createExpressMiddleware({
-    router: appRouter,
-  }),
-);
 
-app.listen(21212, () => {
-  console.log("Server listening... http://localhost:21212/");
+const port = 21212;
+
+app.listen(port, () => {
+  console.log(`Server listening... http://localhost:${port}/`);
 });

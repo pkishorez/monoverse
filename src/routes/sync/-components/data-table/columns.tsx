@@ -6,7 +6,7 @@ import { Info } from "lucide-react";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { cn } from "~/components/utils";
-import { TrpcRouterOutputs } from "~/src/client";
+import { TrpcRouterOutputs } from "~/trpc/client";
 
 declare module "@tanstack/react-table" {
   // @ts-expect-error - To avoid error.

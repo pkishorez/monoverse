@@ -2,7 +2,7 @@ import { createLazyFileRoute } from "@tanstack/react-router";
 import { uniq } from "lodash-es";
 import { useRef, useState } from "react";
 import { cn } from "~/components/utils";
-import { trpc } from "~/src/client";
+import { trpc } from "~/trpc/client";
 import {
   Canvas,
   Connector,
@@ -44,10 +44,10 @@ function Overview() {
   const highlighted = uniq(selectedLinks.flatMap((v) => [v.from, v.to]));
 
   return (
-    <div className="relative mt-10 grow pb-10">
-      <div className="flex flex-col gap-5">
+    <div className="relative mt-4 grow pb-10">
+      <div className="flex flex-col gap-5 p-5">
         {overview.map(({ label, workspaces }) => (
-          <div className="flex flex-col gap-3" key={label}>
+          <div className="my-3 flex flex-col gap-4" key={label}>
             <h2 className="text-center text-xl font-bold">{label}</h2>
             <div className="flex flex-wrap justify-center gap-4">
               {workspaces.map((v) => (
