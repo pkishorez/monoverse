@@ -2,9 +2,10 @@
   "version": 2,
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "outputDirectory": "dist",
+  "buildCommand": "npm run build",
 
   "functions": {
-    "api/*": {
+    "api/[trpc].js": {
       "includeFiles": "api/[trpc].js"
     }
   }
