@@ -1,5 +1,11 @@
 {
   "version": 2,
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "outputDirectory": "dist"
+  "outputDirectory": "dist",
+
+  "functions": {
+    "api/*": {
+      "includeFiles": "api/[trpc].js"
+    }
+  }
 }
