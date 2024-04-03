@@ -3,6 +3,9 @@ import { getOverview, getSyncUpdates, syncVersions } from "./functionality";
 import { publicProcedure, router } from "./setup";
 
 export const appRouter = router({
+  helloWorld: publicProcedure.query(async () => {
+    return "Hello, World!";
+  }),
   getOverview: publicProcedure
     .input(z.string().optional())
     .query(async ({ input: dirPath }) => {

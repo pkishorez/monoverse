@@ -1,21 +1,5 @@
 {
   "version": 2,
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "outputDirectory": "dist",
-  "buildCommand": "pnpm build",
-  "installCommand": "pnpm install",
-
-  "functions": {
-    "api/index.js": {
-      "memory": 512,
-      "maxDuration": 10
-    }
-  },
-
-  "rewrites": [
-    {
-      "source": "/api/(.*)",
-      "destination": "/api/index.js"
-    }
-  ]
+  "outputDirectory": "dist"
 }

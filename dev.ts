@@ -1,6 +1,18 @@
+/* eslint-disable import/no-internal-modules */
 // eslint-disable-next-line import/no-internal-modules
+import * as trpcExpress from "@trpc/server/adapters/express";
 import cors from "cors";
-import app from "./vercel";
+import express from "express";
+import { appRouter } from "./trpc";
+
+const app = express();
+
+app.use(
+  "/api",
+  trpcExpress.createExpressMiddleware({
+    router: appRouter,
+  }),
+);
 
 app.use(cors());
 
