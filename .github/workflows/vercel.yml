@@ -30,7 +30,7 @@ jobs:
         run: pnpm build:backend
 
       - name: Build for vercel
-        run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
+        run: vercel build --token=${{ secrets.VERCEL_TOKEN }} --prod
 
       - name: Deploy Project artifacts to vercel.
         run: vercel deploy --prod --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
