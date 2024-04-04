@@ -1,0 +1,33 @@
+name: Vercel
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 8
+
+      - name: Install Vercel CLI
+        run: npm install -g vercel
+
+      - name: Setup vercel env
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build for vercel
+        run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Deploy Project artifacts to vercel.
+        run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}

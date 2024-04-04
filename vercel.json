@@ -5,7 +5,7 @@
   "buildCommand": "npm run build",
 
   "functions": {
-    "api/[trpc].js": {
+    "api/*": {
       "includeFiles": "api/[trpc].js"
     }
   }
