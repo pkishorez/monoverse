@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "build:frontend": "vite build",
-    "build:backend": "tsup vercel/[trpc].ts --format esm --out-dir api --minify --treeshake",
+    "build:backend": "tsup vercel/[trpc].ts --format esm --out-dir api",
     "build": "npm run build:frontend",
     "dev": "vite",
     "dev:server": "npx tsx watch dev.ts",
