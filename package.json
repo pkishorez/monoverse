@@ -5,8 +5,9 @@
   "type": "module",
   "scripts": {
     "build:frontend": "vite build",
-    "build:backend": "tsup vercel/[trpc].ts --format esm --out-dir api",
-    "build": "npm run build:frontend",
+    "build:backend": "tsup vercel/[trpc].ts --format cjs --out-dir api --minify --treeshake",
+    "build:internal": "npm run build:frontend && npm run build:backend",
+    "build": "echo 1",
     "dev": "vite",
     "dev:server": "npx tsx watch dev.ts",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",

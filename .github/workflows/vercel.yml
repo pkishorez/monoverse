@@ -27,7 +27,10 @@ jobs:
         run: pnpm install
 
       - name: Build
-        run: pnpm build:backend
+        run: pnpm build:internal
+
+      - name: package.json hack
+        run: mv vercel/package.json package.json
 
       - name: Build for vercel
         run: vercel build --token=${{ secrets.VERCEL_TOKEN }} --prod
