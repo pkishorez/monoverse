@@ -26,6 +26,7 @@ module.exports = {
         allow: [
           "react-dom/client",
           "~/*",
+          "~/src/*",
           "~/components/utils",
           "~/components/ui/*",
           "~/components/*",

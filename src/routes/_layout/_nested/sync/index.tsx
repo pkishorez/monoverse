@@ -1,11 +1,16 @@
-import { createLazyFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
+import { useReward } from "react-rewards";
+
 import { GroupingState } from "@tanstack/react-table";
 import { useMemo, useState } from "react";
-import { useReward } from "react-rewards";
+import invariant from "tiny-invariant";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Dialog, DialogOverlay } from "~/components/ui/dialog";
 import { cn } from "~/components/utils";
+import { Loading } from "~/src/components";
+import { ENV } from "~/src/env";
+import { store, useStore } from "~/src/store";
 import { TrpcRouterOutputs, trpc } from "~/trpc/client";
 import {
   DataTable,
@@ -14,26 +19,44 @@ import {
   getOutofSyncDependencies,
 } from "./-components";
 
-export const Route = createLazyFileRoute("/sync/")({
+export const Route = createFileRoute("/_layout/_nested/sync/")({
   component: Sync,
+  beforeLoad: () => {
+    if (!store.getState().projects.selected) {
+      throw redirect({
+        to: "/",
+      });
+    }
+  },
 });
 
 function Sync() {
-  const { isLoading, error, data } = trpc.getSyncUpdates.useQuery(
-    "/Users/kishorepolamarasetty/CAREER/NUMA/numa-web",
-  );
+  const selectedProject = useStore((s) => s.projects.selected);
+  invariant(!!selectedProject, "selectedProject should be defined");
+
+  const { isLoading, error, data } =
+    trpc.getSyncUpdates.useQuery(selectedProject);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="mt-10">
+        <Loading />
+      </div>
+    );
   }
 
   if (error || !data) {
     return <div>Error loading data</div>;
   }
 
+  const syncResult = data.result;
+  if (!syncResult) {
+    return <div>No sync results found.</div>;
+  }
+
   return (
     <div className="container grow px-0 py-10">
-      <Loaded data={data} />
+      <Loaded data={syncResult} />
     </div>
   );
 }
@@ -41,18 +64,22 @@ function Sync() {
 const Loaded = ({
   data: data,
 }: {
-  data: Exclude<TrpcRouterOutputs["getSyncUpdates"], null>;
+  data: Exclude<
+    Extract<TrpcRouterOutputs["getSyncUpdates"], { success: true }>["result"],
+    null
+  >;
 }) => {
   const { reward } = useReward("rewardId", "confetti", {
     spread: 360,
     elementCount: 200,
   });
   const utils = trpc.useUtils();
+  const selectedProject = useStore((s) => s.projects.selected);
+  invariant(!!selectedProject, "selectedProject should be defined");
+
   const { isPending, mutate } = trpc.syncDependencies.useMutation({
     onSuccess() {
-      utils.getSyncUpdates.invalidate(
-        "/Users/kishorepolamarasetty/CAREER/NUMA/numa-web",
-      );
+      utils.getSyncUpdates.invalidate();
     },
   });
   const syncErrors = useMemo(() => getOutofSyncDependencies(data), [data]);
@@ -90,11 +117,17 @@ const Loaded = ({
               <span>No sync errors 🚀.</span>
             )}
           </Badge>
+
+          {ENV.PROJECT_MODE === "online" && (
+            <p className="pt-4 text-xs text-destructive">
+              Applying sync is only available on offline mode.
+            </p>
+          )}
         </div>
         <div>
           <Button
             variant={scheduledFixCount > 0 ? "default" : "outline" || isPending}
-            disabled={scheduledFixCount === 0}
+            disabled={scheduledFixCount === 0 || ENV.PROJECT_MODE === "online"}
             className="relative flex items-center gap-2"
             onClick={() => {
               reward();

@@ -66,7 +66,7 @@ export const FixSyncDependency = ({
             </div>
           </ScrollArea>
           <div className="my-6">
-            <h2 className="text-lg font-bold">Fix with below version</h2>
+            <h2 className="text-lg font-bold">Sync with below version</h2>
             <div className="mt-4 flex flex-wrap gap-4">
               {uniq(fixSyncInfo.dependencies.map((v) => v.versionRange)).map(
                 (v) => (
@@ -94,9 +94,7 @@ export const FixSyncDependency = ({
               type="button"
               disabled={fixVersion === initialFixVersion}
               onClick={() => {
-                if (fixVersion) {
-                  onFix(fixVersion);
-                }
+                onFix(fixVersion);
               }}
             >
               {initialFixVersion

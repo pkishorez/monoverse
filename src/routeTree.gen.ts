@@ -13,47 +13,65 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as LayoutImport } from './routes/_layout'
+import { Route as LayoutNestedImport } from './routes/_layout/_nested'
+import { Route as LayoutNestedSyncIndexImport } from './routes/_layout/_nested/sync/index'
+import { Route as LayoutNestedOverviewIndexImport } from './routes/_layout/_nested/overview/index'
 
 // Create Virtual Routes
 
-const IndexLazyImport = createFileRoute('/')()
-const SyncIndexLazyImport = createFileRoute('/sync/')()
-const OverviewIndexLazyImport = createFileRoute('/overview/')()
+const LayoutIndexLazyImport = createFileRoute('/_layout/')()
 
 // Create/Update Routes
 
-const IndexLazyRoute = IndexLazyImport.update({
+const LayoutRoute = LayoutImport.update({
+  id: '/_layout',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const LayoutIndexLazyRoute = LayoutIndexLazyImport.update({
   path: '/',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
+  getParentRoute: () => LayoutRoute,
+} as any).lazy(() => import('./routes/_layout/index.lazy').then((d) => d.Route))
 
-const SyncIndexLazyRoute = SyncIndexLazyImport.update({
+const LayoutNestedRoute = LayoutNestedImport.update({
+  id: '/_nested',
+  getParentRoute: () => LayoutRoute,
+} as any)
+
+const LayoutNestedSyncIndexRoute = LayoutNestedSyncIndexImport.update({
   path: '/sync/',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/sync/index.lazy').then((d) => d.Route))
+  getParentRoute: () => LayoutNestedRoute,
+} as any)
 
-const OverviewIndexLazyRoute = OverviewIndexLazyImport.update({
+const LayoutNestedOverviewIndexRoute = LayoutNestedOverviewIndexImport.update({
   path: '/overview/',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() =>
-  import('./routes/overview/index.lazy').then((d) => d.Route),
-)
+  getParentRoute: () => LayoutNestedRoute,
+} as any)
 
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      preLoaderRoute: typeof IndexLazyImport
+    '/_layout': {
+      preLoaderRoute: typeof LayoutImport
       parentRoute: typeof rootRoute
     }
-    '/overview/': {
-      preLoaderRoute: typeof OverviewIndexLazyImport
-      parentRoute: typeof rootRoute
+    '/_layout/_nested': {
+      preLoaderRoute: typeof LayoutNestedImport
+      parentRoute: typeof LayoutImport
     }
-    '/sync/': {
-      preLoaderRoute: typeof SyncIndexLazyImport
-      parentRoute: typeof rootRoute
+    '/_layout/': {
+      preLoaderRoute: typeof LayoutIndexLazyImport
+      parentRoute: typeof LayoutImport
+    }
+    '/_layout/_nested/overview/': {
+      preLoaderRoute: typeof LayoutNestedOverviewIndexImport
+      parentRoute: typeof LayoutNestedImport
+    }
+    '/_layout/_nested/sync/': {
+      preLoaderRoute: typeof LayoutNestedSyncIndexImport
+      parentRoute: typeof LayoutNestedImport
     }
   }
 }
@@ -61,9 +79,13 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 export const routeTree = rootRoute.addChildren([
-  IndexLazyRoute,
-  OverviewIndexLazyRoute,
-  SyncIndexLazyRoute,
+  LayoutRoute.addChildren([
+    LayoutNestedRoute.addChildren([
+      LayoutNestedOverviewIndexRoute,
+      LayoutNestedSyncIndexRoute,
+    ]),
+    LayoutIndexLazyRoute,
+  ]),
 ])
 
 /* prettier-ignore-end */

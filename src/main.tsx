@@ -9,10 +9,11 @@ import { trpc } from "~/trpc/client";
 
 const queryClient = new QueryClient();
 const trpcClient = trpc.createClient({
-  links: [httpBatchLink({ url: import.meta.env.VITE_TRPC_API_ROUTE })],
+  links: [httpBatchLink({ url: ENV.API_BASE_URL })],
 });
 
 // Import the generated route tree
+import { ENV } from "./env";
 import { routeTree } from "./routeTree.gen";
 
 // Create a new router instance

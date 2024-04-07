@@ -7,14 +7,13 @@ import { appRouter } from "./trpc";
 
 const app = express();
 
+app.use(cors());
 app.use(
   "/api",
   trpcExpress.createExpressMiddleware({
     router: appRouter,
   }),
 );
-
-app.use(cors());
 
 const port = 21212;
 

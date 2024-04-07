@@ -1,7 +1,10 @@
 import { TrpcRouterOutputs } from "~/trpc/client";
 
 export const transformOverviewData = (
-  data: Exclude<TrpcRouterOutputs["getOverview"], null>,
+  data: Exclude<
+    Extract<TrpcRouterOutputs["getOverview"], { success: true }>["result"],
+    null
+  >,
 ) => {
   type Workspace = (typeof data)[0];
 

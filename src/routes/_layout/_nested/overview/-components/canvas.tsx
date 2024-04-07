@@ -90,6 +90,7 @@ export const Canvas = ({
       <defs>
         {["from", "to"].map((type) => (
           <marker
+            key={type}
             id={`arrow-${type}`}
             viewBox={`0 0 ${markerSize} ${markerSize}`}
             refX={markerSize / 2}

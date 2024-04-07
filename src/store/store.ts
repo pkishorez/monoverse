@@ -16,6 +16,47 @@ export const useStore = create<StateType>()(
               theme: get().theme === "dark" ? "light" : "dark",
             });
           },
+          removeProject: (project) => {
+            set({
+              ...get(),
+              projects: {
+                ...get().projects,
+                list: get().projects.list.filter(
+                  (p) => p.value !== project.value,
+                ),
+              },
+            });
+          },
+          addProject: (project) => {
+            if (get().projects.list.some((p) => p.value === project.value)) {
+              return;
+            }
+            set({
+              ...get(),
+              projects: {
+                ...get().projects,
+                list: [...get().projects.list, project],
+              },
+            });
+          },
+          selectProject: (project) => {
+            set({
+              ...get(),
+              projects: {
+                ...get().projects,
+                selected: project,
+              },
+            });
+          },
+          resetProject() {
+            set({
+              ...get(),
+              projects: {
+                ...get().projects,
+                selected: undefined,
+              },
+            });
+          },
         };
       },
       {
@@ -31,7 +72,13 @@ export const useStore = create<StateType>()(
                 version: z.number(),
               });
 
-              return persistSchema.parse(JSON.parse(value));
+              const persisted = persistSchema.parse(JSON.parse(value));
+
+              if (persisted.state.version !== initialState.version) {
+                return null;
+              }
+
+              return persisted;
             } catch (err) {
               console.log("Error parsing local storage", err);
               return null;

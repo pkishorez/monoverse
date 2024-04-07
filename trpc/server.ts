@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { downloadGitRepo } from "~/domain";
 import { getOverview, getSyncUpdates, syncVersions } from "./functionality";
 import { publicProcedure, router } from "./setup";
 
@@ -7,18 +8,44 @@ export const appRouter = router({
     return "Hello, World!";
   }),
   getOverview: publicProcedure
-    .input(z.string().optional())
-    .query(async ({ input: dirPath }) => {
-      const result = getOverview(dirPath ?? process.cwd());
+    .input(
+      z.object({
+        type: z.union([z.literal("filepath"), z.literal("url")]),
+        value: z.string(),
+      }),
+    )
+    .query(async ({ input }) => {
+      const { type, value } = input;
 
-      return result;
+      console.log("VALUE: ", value);
+
+      const dirPath =
+        type === "filepath" ? value : await downloadGitRepo(value);
+
+      const result = getOverview(dirPath);
+      return {
+        success: true as const,
+        result,
+      };
     }),
   getSyncUpdates: publicProcedure
-    .input(z.string())
-    .query(async ({ input: dirPath }) => {
+    .input(
+      z.object({
+        type: z.union([z.literal("filepath"), z.literal("url")]),
+        value: z.string(),
+      }),
+    )
+    .query(async ({ input }) => {
+      const { type, value } = input;
+
+      const dirPath =
+        type === "filepath" ? value : await downloadGitRepo(value);
       const result = getSyncUpdates(dirPath);
 
-      return result;
+      return {
+        success: true as const,
+        result,
+      };
     }),
 
   syncDependencies: publicProcedure

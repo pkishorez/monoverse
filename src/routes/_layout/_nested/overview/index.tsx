@@ -1,7 +1,9 @@
-import { createLazyFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
+
 import { uniq } from "lodash-es";
 import { useRef, useState } from "react";
 import { cn } from "~/components/utils";
+import { store, useStore } from "~/src/store";
 import { trpc } from "~/trpc/client";
 import {
   Canvas,
@@ -9,13 +11,23 @@ import {
   ConnectorRef,
   transformOverviewData,
 } from "./-components";
-export const Route = createLazyFileRoute("/overview/")({
+
+export const Route = createFileRoute("/_layout/_nested/overview/")({
   component: Overview,
+  beforeLoad: () => {
+    if (!store.getState().projects.selected) {
+      throw redirect({
+        to: "/",
+      });
+    }
+  },
 });
 
 function Overview() {
+  const selectedProject = useStore((s) => s.projects.selected);
+
   const { data, isLoading, isError } = trpc.getOverview.useQuery(
-    "/Users/kishorepolamarasetty/CAREER/NUMA/numa-web",
+    selectedProject!,
   );
   const connectorRefMap = useRef<Record<string, ConnectorRef>>({});
   const [selected, setSelected] = useState<string[]>([]);
@@ -29,14 +41,21 @@ function Overview() {
     });
   };
 
-  if (isLoading) {
+  if (isLoading || !data) {
     return <div>Loading...</div>;
   }
-  if (isError || !data) {
+
+  if (!data.success) {
+    return <div>{data.error}</div>;
+  }
+
+  const { result } = data;
+
+  if (isError || !result) {
     return <div>Error loading data</div>;
   }
 
-  const { overview, links } = transformOverviewData(data);
+  const { overview, links } = transformOverviewData(result);
 
   const selectedLinks = links.filter(
     ({ from, to }) => selected.includes(from) || selected.includes(to),
