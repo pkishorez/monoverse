@@ -3,6 +3,7 @@ import { createFileRoute, redirect } from "@tanstack/react-router";
 import { uniq } from "lodash-es";
 import { useRef, useState } from "react";
 import { cn } from "~/components/utils";
+import { Loading } from "~/src/components";
 import { store, useStore } from "~/src/store";
 import { trpc } from "~/trpc/client";
 import {
@@ -42,11 +43,11 @@ function Overview() {
   };
 
   if (isLoading || !data) {
-    return <div>Loading...</div>;
-  }
-
-  if (!data.success) {
-    return <div>{data.error}</div>;
+    return (
+      <div className="mt-10">
+        <Loading />
+      </div>
+    );
   }
 
   const { result } = data;

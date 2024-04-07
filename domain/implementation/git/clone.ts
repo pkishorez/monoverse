@@ -1,14 +1,15 @@
 import AdmZip from "adm-zip";
 import fs, { createWriteStream } from "fs";
-import { rm } from "fs/promises";
+import { mkdtemp, rm } from "fs/promises";
 import os from "os";
 import path from "path";
 import { Readable } from "stream";
 import { pipeline } from "stream/promises";
 
-export const downloadGitRepo = async (url: string): Promise<string> => {
-  const outputPath = path.join(os.tmpdir(), "monoverse-github-zip.zip");
-  const outputDir = path.join(os.tmpdir(), "monoverse-github-extract");
+export const downloadGitRepo = async (url: string) => {
+  const tempDir = await mkdtemp(path.join(os.tmpdir(), "monoverse-"));
+  const outputPath = path.join(tempDir, "github-zip.zip");
+  const outputDir = path.join(tempDir, "github-extract");
 
   await rm(outputDir, { recursive: true, force: true });
   await rm(outputPath, { force: true });
@@ -22,7 +23,12 @@ export const downloadGitRepo = async (url: string): Promise<string> => {
   const zip = new AdmZip(outputPath);
   zip.extractAllTo(outputDir, true);
 
-  return getInnerDirPath(outputDir);
+  return {
+    projectDir: await getInnerDirPath(outputDir),
+    cleanupDir: () => {
+      return rm(tempDir, { recursive: true, force: true });
+    },
+  };
 };
 
 async function downloadZip(url: string, outputPath: string) {

@@ -17,16 +17,25 @@ export const appRouter = router({
     .query(async ({ input }) => {
       const { type, value } = input;
 
-      console.log("VALUE: ", value);
+      if (type === "filepath") {
+        const dirPath = value;
 
-      const dirPath =
-        type === "filepath" ? value : await downloadGitRepo(value);
+        const result = getOverview(dirPath);
+        return {
+          success: true as const,
+          result,
+        };
+      } else {
+        const { projectDir, cleanupDir } = await downloadGitRepo(value);
+        const result = getOverview(projectDir);
 
-      const result = getOverview(dirPath);
-      return {
-        success: true as const,
-        result,
-      };
+        await cleanupDir();
+
+        return {
+          success: true as const,
+          result,
+        };
+      }
     }),
   getSyncUpdates: publicProcedure
     .input(
@@ -38,14 +47,25 @@ export const appRouter = router({
     .query(async ({ input }) => {
       const { type, value } = input;
 
-      const dirPath =
-        type === "filepath" ? value : await downloadGitRepo(value);
-      const result = getSyncUpdates(dirPath);
+      if (type === "filepath") {
+        const dirPath = value;
 
-      return {
-        success: true as const,
-        result,
-      };
+        const result = getSyncUpdates(dirPath);
+        return {
+          success: true as const,
+          result,
+        };
+      } else {
+        const { projectDir, cleanupDir } = await downloadGitRepo(value);
+        const result = getSyncUpdates(projectDir);
+
+        await cleanupDir();
+
+        return {
+          success: true as const,
+          result,
+        };
+      }
     }),
 
   syncDependencies: publicProcedure
