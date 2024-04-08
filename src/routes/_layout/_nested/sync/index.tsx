@@ -2,6 +2,7 @@ import { createFileRoute, redirect } from "@tanstack/react-router";
 import { useReward } from "react-rewards";
 
 import { GroupingState } from "@tanstack/react-table";
+import { Info } from "lucide-react";
 import { useMemo, useState } from "react";
 import invariant from "tiny-invariant";
 import { Badge } from "~/components/ui/badge";
@@ -85,7 +86,7 @@ const Loaded = ({
 
   const { isPending, mutate } = trpc.syncDependencies.useMutation({
     onSuccess() {
-      utils.getSyncUpdates.invalidate();
+      utils.getSyncUpdates.invalidate(selectedProject);
     },
   });
   const syncErrors = useMemo(() => getOutofSyncDependencies(data), [data]);
@@ -123,14 +124,8 @@ const Loaded = ({
               <span>No sync errors 🚀.</span>
             )}
           </Badge>
-
-          {ENV.PROJECT_MODE === "online" && (
-            <p className="pt-4 text-xs text-destructive">
-              Applying sync is only available on offline mode.
-            </p>
-          )}
         </div>
-        <div>
+        <div className="flex flex-col items-end">
           <Button
             variant={scheduledFixCount > 0 ? "default" : "outline" || isPending}
             disabled={scheduledFixCount === 0 || ENV.PROJECT_MODE === "online"}
@@ -139,8 +134,13 @@ const Loaded = ({
               reward();
               setScheduledSyncFixes({});
 
+              const selectedProject = store.getState().projects.selected;
+              if (!selectedProject) {
+                return;
+              }
+
               mutate({
-                dirPath: "/Users/kishorepolamarasetty/CAREER/NUMA/numa-web",
+                dirPath: selectedProject.value,
                 updates: Object.entries(scheduledSyncFixes).map(
                   ([dependencyName, versionRange]) => ({
                     dependencyName,
@@ -160,6 +160,12 @@ const Loaded = ({
               className="absolute left-1/2 top-1/2"
             />
           </Button>
+          {ENV.PROJECT_MODE === "online" && (
+            <div className="mt-2 flex items-center gap-2 rounded-lg bg-muted p-3 text-xs text-muted-foreground">
+              <Info size={12} />
+              <span>Applying sync is only available on offline mode.</span>
+            </div>
+          )}
         </div>
       </div>
       <div className="overflow-auto">

@@ -1,5 +1,5 @@
 import { createLazyFileRoute, useRouter } from "@tanstack/react-router";
-import { CirclePlus, File, Link, Trash2Icon } from "lucide-react";
+import { CirclePlus, File, Info, Link, Trash2Icon } from "lucide-react";
 import { useMemo, useState } from "react";
 import invariant from "tiny-invariant";
 import { Button } from "~/components/ui/button";
@@ -13,6 +13,7 @@ import {
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { Logo } from "~/src/components";
+import { ENV } from "~/src/env";
 import { useStore } from "../../store";
 
 export const Route = createLazyFileRoute("/_layout/")({
@@ -41,10 +42,21 @@ function Index() {
             <CirclePlus />
             Add project
           </Button>
+          {ENV.PROJECT_MODE === "online" && (
+            <div className="flex items-center gap-2 rounded-lg bg-muted p-3 text-xs text-muted-foreground">
+              <Info size={12} />
+              <span>
+                Local filesystem projects cannot be accessed in online mode.
+              </span>
+            </div>
+          )}
           {projects.list.length > 0 ? (
             projects.list.map((project, i) => (
               <div key={i} className="group flex items-center gap-3">
                 <Button
+                  disabled={
+                    ENV.PROJECT_MODE === "online" && project.type === "filepath"
+                  }
                   onClick={() => {
                     selectProject(project);
                     router.navigate({
