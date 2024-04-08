@@ -35,7 +35,7 @@ export type StateType = z.infer<typeof stateSchema>;
 
 export const initialState: StateValueType = {
   version: "0.0.1",
-  theme: "light",
+  theme: "dark",
   projects: {
     list: [
       {
