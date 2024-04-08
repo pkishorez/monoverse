@@ -11,7 +11,7 @@ export const Logo = ({
   return (
     <motion.button
       layoutId="monoverse-logo"
-      transition={{ duration: 0.4, type: "tween", ease: "easeInOut" }}
+      transition={{ type: "spring", duration: 0.5 }}
       className={cn("text-center text-6xl font-medium text-primary", className)}
       onClick={onClick}
     >
