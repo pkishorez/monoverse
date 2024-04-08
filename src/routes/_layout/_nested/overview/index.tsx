@@ -29,6 +29,11 @@ function Overview() {
 
   const { data, isLoading, isError } = trpc.getOverview.useQuery(
     selectedProject!,
+    {
+      refetchOnWindowFocus: false,
+      refetchOnMount: false,
+      refetchOnReconnect: false,
+    },
   );
   const connectorRefMap = useRef<Record<string, ConnectorRef>>({});
   const [selected, setSelected] = useState<string[]>([]);

@@ -34,8 +34,14 @@ function Sync() {
   const selectedProject = useStore((s) => s.projects.selected);
   invariant(!!selectedProject, "selectedProject should be defined");
 
-  const { isLoading, error, data } =
-    trpc.getSyncUpdates.useQuery(selectedProject);
+  const { isLoading, error, data } = trpc.getSyncUpdates.useQuery(
+    selectedProject,
+    {
+      refetchOnWindowFocus: false,
+      refetchOnMount: false,
+      refetchOnReconnect: false,
+    },
+  );
 
   if (isLoading) {
     return (

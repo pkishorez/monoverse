@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build:frontend": "vite build",
+    "build:frontend": "vite build --mode prod",
     "build:backend": "tsup vercel/[trpc].ts --format esm --out-dir api --minify --treeshake",
     "build:internal": "npm run build:frontend && npm run build:backend",
     "build": "echo 1",
