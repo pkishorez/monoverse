@@ -1,7 +1,7 @@
 {
   "name": "monoverse",
-  "version": "0.0.9",
-  "private": true,
+  "version": "0.0.10",
+  "private": false,
   "type": "module",
   "author": {
     "name": "Kishore"
