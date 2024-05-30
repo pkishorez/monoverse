@@ -1,7 +1,6 @@
 {
   "name": "monoverse",
-  "version": "0.0.10",
-  "private": false,
+  "version": "0.0.11",
   "type": "module",
   "author": {
     "name": "Kishore"
@@ -11,10 +10,12 @@
     "url": "https://github.com/pkishorez/monoverse"
   },
   "bin": {
-    "monoverse": "cli.js"
+    "monoverse": "dist/cli.js"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "files": [
-    "cli.js",
     "dist/",
     "README.md"
   ],
@@ -24,6 +25,7 @@
     "build:vercel": "npm run build:frontend && npm run build:vercel-api",
     "build:cli": "tsup cli.ts --format esm",
     "build": "npm run build:frontend && npm run build:cli",
+    "release": "npm run build",
     "dev": "vite",
     "dev:server": "npx tsx watch dev.ts",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",

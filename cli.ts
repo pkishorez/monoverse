@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 /* eslint-disable import/no-named-as-default-member */
 /* eslint-disable import/no-internal-modules */
 import * as trpcExpress from "@trpc/server/adapters/express";
