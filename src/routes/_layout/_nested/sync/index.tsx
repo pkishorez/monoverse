@@ -110,8 +110,8 @@ const Loaded = ({
 
   const scheduledFixCount = Object.keys(scheduledSyncFixes).length;
 
-  return (
-    <div className="flex h-min flex-col gap-4 overflow-auto">
+  const headerSection = useMemo(() => {
+    return (
       <div className="flex justify-between">
         <div>
           <Badge
@@ -168,6 +168,30 @@ const Loaded = ({
           )}
         </div>
       </div>
+    );
+  }, [
+    isPending,
+    mutate,
+    reward,
+    scheduledFixCount,
+    scheduledSyncFixes,
+    syncErrors.length,
+  ]);
+
+  if (filteredData.length === 0) {
+    return (
+      <div>
+        {headerSection}
+        <h1 className="mt-8 text-center text-4xl text-foreground opacity-30">
+          No dependency sync issues found 🙌🏻
+        </h1>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex h-min flex-col gap-4 overflow-auto">
+      {headerSection}
       <div className="overflow-auto">
         <DataTable
           scheduledSyncFixes={scheduledSyncFixes}

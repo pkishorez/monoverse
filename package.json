@@ -1,13 +1,29 @@
 {
   "name": "monoverse",
-  "version": "0.0.7",
+  "version": "0.0.9",
   "private": true,
   "type": "module",
+  "author": {
+    "name": "Kishore"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pkishorez/monoverse"
+  },
+  "bin": {
+    "monoverse": "cli.js"
+  },
+  "files": [
+    "cli.js",
+    "dist/",
+    "README.md"
+  ],
   "scripts": {
     "build:frontend": "vite build --mode production",
-    "build:backend": "tsup vercel/[trpc].ts --format esm --out-dir api --minify --treeshake",
-    "build:internal": "npm run build:frontend && npm run build:backend",
-    "build": "echo 1",
+    "build:vercel-api": "tsup vercel/[trpc].ts --format esm --out-dir api --minify --treeshake",
+    "build:vercel": "npm run build:frontend && npm run build:vercel-api",
+    "build:cli": "tsup cli.ts --format esm",
+    "build": "npm run build:frontend && npm run build:cli",
     "dev": "vite",
     "dev:server": "npx tsx watch dev.ts",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
@@ -20,6 +36,7 @@
     "@radix-ui/react-label": "^2.0.2",
     "@radix-ui/react-tabs": "^1.0.4",
     "@trpc/server": "11.0.0-next.327",
+    "@vercel/speed-insights": "^1.0.11",
     "adm-zip": "^0.5.12",
     "cors": "^2.8.5",
     "express": "^4.19.2",
@@ -29,6 +46,7 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.27.5",
     "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-dropdown-menu": "^2.0.6",
     "@radix-ui/react-scroll-area": "^1.0.5",

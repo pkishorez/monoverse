@@ -19,7 +19,7 @@ declare module "@tanstack/react-table" {
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 export type Dependency = Exclude<
-  TrpcRouterOutputs["getSyncUpdates"],
+  TrpcRouterOutputs["getSyncUpdates"]["result"],
   null
 >[number];
 
@@ -28,19 +28,29 @@ const columnHelper = createColumnHelper<Dependency>();
 export const columns = [
   columnHelper.accessor("dependencyName", {
     header: () => <div>Dependency</div>,
-    cell: (info) => (
-      <div className="flex items-center gap-1">
-        <Info
-          size={16}
-          className={cn({
-            "opacity-100": info.row.original.isInternalDependency,
-            "pointer-events-none opacity-0":
-              !info.row.original.isInternalDependency,
-          })}
-        />
-        <span>{info.getValue()}</span>
-      </div>
-    ),
+    cell: (info) => {
+      const isInternalDependency = info.row.original.isInternalDependency;
+      return (
+        <div
+          className="flex items-center gap-1"
+          title={
+            isInternalDependency
+              ? "This is a workspace within the monorepo."
+              : undefined
+          }
+        >
+          <Info
+            size={16}
+            className={cn({
+              "opacity-100": info.row.original.isInternalDependency,
+              "pointer-events-none opacity-0":
+                !info.row.original.isInternalDependency,
+            })}
+          />
+          <span>{info.getValue()}</span>
+        </div>
+      );
+    },
     aggregationFn: "count",
   }),
   columnHelper.accessor("workspaceName", {

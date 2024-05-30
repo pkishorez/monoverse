@@ -5,6 +5,7 @@ import { httpBatchLink } from "@trpc/client";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 // eslint-disable-next-line import/no-internal-modules
+import { SpeedInsights } from "@vercel/speed-insights/react";
 import { trpc } from "~/trpc/client";
 
 const queryClient = new QueryClient();
@@ -27,6 +28,7 @@ declare module "@tanstack/react-router" {
 }
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
+    {import.meta.env.VITE_DEPLOYMENT_ENV === "vercel" && <SpeedInsights />}
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
         <RouterProvider router={router} />
