@@ -22,7 +22,8 @@
 
     // Paths
     "paths": {
-      "~/*": ["./*"]
+      "~/*": ["./*"],
+      "@components/*": ["./src/components/*"]
     },
     "types": [
       "./types/fixturez.d.ts",

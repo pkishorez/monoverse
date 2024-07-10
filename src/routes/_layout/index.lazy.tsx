@@ -1,17 +1,17 @@
-import { createLazyFileRoute, useRouter } from "@tanstack/react-router";
-import { CirclePlus, File, Info, Link, Trash2Icon } from "lucide-react";
-import { useMemo, useState } from "react";
-import invariant from "tiny-invariant";
-import { Button } from "~/components/ui/button";
+import { Button } from "@components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogFooter,
   DialogHeader,
   DialogOverlay,
-} from "~/components/ui/dialog";
-import { Input } from "~/components/ui/input";
-import { Label } from "~/components/ui/label";
+} from "@components/ui/dialog";
+import { Input } from "@components/ui/input";
+import { Label } from "@components/ui/label";
+import { createLazyFileRoute, useRouter } from "@tanstack/react-router";
+import { CirclePlus, File, Info, Link, Trash2Icon } from "lucide-react";
+import { useMemo, useState } from "react";
+import invariant from "tiny-invariant";
 import { Logo } from "~/src/components";
 import { ENV } from "~/src/env";
 import { useStore } from "../../store";
@@ -111,7 +111,7 @@ function AddProjectModal({
         "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" + // port and path
         "(\\?[;&a-z\\d%_.~+=-]*)?" + // query string
         "(\\#[-a-z\\d_]*)?$",
-      "i",
+      "i"
     ); // fragment locator
 
     // Regex for absolute file path validation (simplified version)

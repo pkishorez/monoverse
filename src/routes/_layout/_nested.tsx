@@ -1,6 +1,6 @@
+import { Button } from "@components/ui/button";
 import { Link, Outlet, createFileRoute } from "@tanstack/react-router";
 import { Sun } from "lucide-react";
-import { Button } from "~/components/ui/button";
 import { Logo } from "~/src/components";
 import { useStore } from "../../store";
 

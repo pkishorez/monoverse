@@ -16,8 +16,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "~/components/ui/table";
-import { cn } from "~/components/utils";
+} from "@components/ui/table";
+import { cn } from "@components/utils";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -77,13 +77,13 @@ export function DataTable<TData, TValue>({
                     key={header.id}
                     className={cn(
                       "h-auto p-0 text-nowrap whitespace-nowrap",
-                      headerCls,
+                      headerCls
                     )}
                   >
                     {
                       <div
                         className={cn(
-                          "flex items-center gap-3 bg-secondary pl-4 text-secondary-foreground",
+                          "flex items-center gap-3 bg-secondary pl-4 text-secondary-foreground"
                         )}
                       >
                         <button
@@ -105,7 +105,7 @@ export function DataTable<TData, TValue>({
                         >
                           {flexRender(
                             header.column.columnDef.header,
-                            header.getContext(),
+                            header.getContext()
                           )}
                         </button>
                         <div className="grow" />
@@ -147,7 +147,7 @@ export function DataTable<TData, TValue>({
                           ? cell.column.columnDef.aggregatedCell ??
                               cell.column.columnDef.cell
                           : cell.column.columnDef.cell,
-                        { ...cell.getContext() },
+                        { ...cell.getContext() }
                       )}
                     </TableCell>
                   );

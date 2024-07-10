@@ -1,14 +1,14 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { useReward } from "react-rewards";
 
+import { Badge } from "@components/ui/badge";
+import { Button } from "@components/ui/button";
+import { Dialog, DialogOverlay } from "@components/ui/dialog";
+import { cn } from "@components/utils";
 import { GroupingState } from "@tanstack/react-table";
 import { Info } from "lucide-react";
 import { useMemo, useState } from "react";
 import invariant from "tiny-invariant";
-import { Badge } from "~/components/ui/badge";
-import { Button } from "~/components/ui/button";
-import { Dialog, DialogOverlay } from "~/components/ui/dialog";
-import { cn } from "~/components/utils";
 import { Loading } from "~/src/components";
 import { ENV } from "~/src/env";
 import { store, useStore } from "~/src/store";
@@ -41,7 +41,7 @@ function Sync() {
       refetchOnWindowFocus: false,
       refetchOnMount: false,
       refetchOnReconnect: false,
-    },
+    }
   );
 
   if (isLoading) {
@@ -92,7 +92,7 @@ const Loaded = ({
   const syncErrors = useMemo(() => getOutofSyncDependencies(data), [data]);
   const filteredData = useMemo(
     () => syncErrors.flatMap((v) => v.dependencies),
-    [syncErrors],
+    [syncErrors]
   );
   const [grouping, setGrouping] = useState<GroupingState>(["dependencyName"]);
 
@@ -105,7 +105,7 @@ const Loaded = ({
   >();
 
   const fixSyncInfo = syncErrors.find(
-    (v) => v.dependencyName === selectedDependency,
+    (v) => v.dependencyName === selectedDependency
   );
 
   const scheduledFixCount = Object.keys(scheduledSyncFixes).length;
@@ -145,7 +145,7 @@ const Loaded = ({
                   ([dependencyName, versionRange]) => ({
                     dependencyName,
                     versionRange,
-                  }),
+                  })
                 ),
               });
             }}

@@ -1,8 +1,8 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
+import { cn } from "@components/utils";
 import { uniq } from "lodash-es";
 import { useRef, useState } from "react";
-import { cn } from "~/components/utils";
 import { Loading } from "~/src/components";
 import { store, useStore } from "~/src/store";
 import { trpc } from "~/trpc/client";
@@ -33,7 +33,7 @@ function Overview() {
       refetchOnWindowFocus: false,
       refetchOnMount: false,
       refetchOnReconnect: false,
-    },
+    }
   );
   const connectorRefMap = useRef<Record<string, ConnectorRef>>({});
   const [selected, setSelected] = useState<string[]>([]);
@@ -64,7 +64,7 @@ function Overview() {
   const { overview, links } = transformOverviewData(result);
 
   const selectedLinks = links.filter(
-    ({ from, to }) => selected.includes(from) || selected.includes(to),
+    ({ from, to }) => selected.includes(from) || selected.includes(to)
   );
   const highlighted = uniq(selectedLinks.flatMap((v) => [v.from, v.to]));
 
@@ -89,7 +89,7 @@ function Overview() {
                       "bg-accent p-4 text-accent-foreground border-2 box-border transition-all cursor-pointer hover:opacity-95",
                       {
                         "bg-primary text-primary-foreground": selected.includes(
-                          v.workspaceName,
+                          v.workspaceName
                         ),
                         "border-primary":
                           highlighted.includes(v.workspaceName) &&
@@ -98,7 +98,7 @@ function Overview() {
                           selected.length > 0 &&
                           !selected.includes(v.workspaceName) &&
                           !highlighted.includes(v.workspaceName),
-                      },
+                      }
                     )}
                     onClick={toggleSelected(v.workspaceName)}
                   >

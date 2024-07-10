@@ -1,6 +1,6 @@
+import { cn } from "@components/utils";
 import * as d3 from "d3";
 import { MutableRefObject, useMemo, useRef } from "react";
-import { cn } from "~/components/utils";
 import { ConnectorRef } from "./connector";
 
 interface Props {
@@ -27,7 +27,7 @@ export const Canvas = ({
     try {
       return links.map(
         (
-          d,
+          d
         ): {
           from: [number, number];
           to: [number, number];
@@ -74,7 +74,7 @@ export const Canvas = ({
             to: [to.offsetLeft + 10, to.offsetTop - 10] as const,
             type: selected?.includes(d.from) ? "from" : "to",
           };
-        },
+        }
       );
     } catch {
       return [];

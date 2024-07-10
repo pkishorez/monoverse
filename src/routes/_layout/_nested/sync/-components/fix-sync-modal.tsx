@@ -1,8 +1,6 @@
-import { uniq } from "lodash-es";
-import { useState } from "react";
-import { Button } from "~/components/ui/button";
-import { DialogContent, DialogFooter } from "~/components/ui/dialog";
-import { ScrollArea } from "~/components/ui/scroll-area";
+import { Button } from "@components/ui/button";
+import { DialogContent, DialogFooter } from "@components/ui/dialog";
+import { ScrollArea } from "@components/ui/scroll-area";
 import {
   Table,
   TableBody,
@@ -10,7 +8,9 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "~/components/ui/table";
+} from "@components/ui/table";
+import { uniq } from "lodash-es";
+import { useState } from "react";
 import { getOutofSyncDependencies } from "./utils";
 
 export const FixSyncDependency = ({
@@ -23,7 +23,7 @@ export const FixSyncDependency = ({
   onFix: (versionRange?: string) => void;
 }) => {
   const [fixVersion, setFixVersion] = useState<string | undefined>(
-    initialFixVersion,
+    initialFixVersion
   );
   if (!fixSyncInfo) {
     return null;
@@ -78,7 +78,7 @@ export const FixSyncDependency = ({
                   >
                     {v}
                   </Button>
-                ),
+                )
               )}
             </div>
           </div>

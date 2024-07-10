@@ -8,12 +8,21 @@ import { uniq } from "lodash-es";
 import { Info } from "lucide-react";
 import { TrpcRouterOutputs } from "~/trpc/client";
 
+export interface TableProps {
+  props:
+    | {
+        type: "dependencySync";
+        onSyncFix: (depName: string, versionRange?: string) => void;
+        scheduledSyncFixes: Record<string, string>;
+      }
+    | {
+        type: "dependencyUpdates";
+      };
+}
+
 declare module "@tanstack/react-table" {
   // @ts-expect-error - To avoid error.
-  interface TableMeta {
-    onSyncFix: (depName: string) => void;
-    scheduledSyncFixes: Record<string, string>;
-  }
+  interface TableMeta extends TableProps {}
 }
 
 // This type is used to define the shape of our data.
@@ -64,35 +73,49 @@ export const columns = [
     cell: (info) => <Badge variant="outline">{info.getValue()}</Badge>,
 
     aggregatedCell: ({ row, table }) => {
-      const sameDep =
-        uniq(row.subRows.map((v) => v.original.dependencyName)).length === 1;
-      const sameVersion =
-        uniq(row.subRows.map((v) => v.original.versionRange)).length === 1;
+      const meta = table.options.meta;
 
-      if (!sameDep) {
-        return "-";
-      }
-      if (sameDep && !sameVersion) {
-        const scheduledFix =
-          table.options.meta?.scheduledSyncFixes[row.original.dependencyName];
-
-        return (
-          <div className=" flex flex-nowrap items-center gap-2">
-            <div className="text-nowrap">
-              {scheduledFix ? "✅ Marked fix" : "⛔️ Mixed"}
-            </div>
-            <Button
-              variant={scheduledFix ? "default" : "destructive"}
-              className="h-auto py-1 opacity-0 transition-opacity group-hover:opacity-100"
-              size="sm"
-              onClick={() =>
-                table.options.meta?.onSyncFix(row.original.dependencyName)
-              }
-            >
-              {scheduledFix ? "update" : "fix"}
-            </Button>
-          </div>
+      if (meta?.props?.type === "dependencySync") {
+        const sameDep =
+          uniq(row.subRows.map((v) => v.original.dependencyName)).length === 1;
+        const versionRanges = uniq(
+          row.subRows.map((v) => v.original.versionRange)
         );
+
+        // Grouped other than the dependency.
+        if (!sameDep) {
+          return "-";
+        }
+        if (sameDep && versionRanges.length > 1) {
+          const scheduledFix =
+            meta.props.scheduledSyncFixes?.[row.original.dependencyName];
+
+          return (
+            <div className=" flex flex-nowrap items-center gap-2">
+              <div className="flex gap-x-2">
+                {versionRanges.map((v) => (
+                  <Button
+                    variant={scheduledFix === v ? "default" : "ghost"}
+                    key={v}
+                    size="sm"
+                    onClick={() => {
+                      if (meta?.props?.type === "dependencySync") {
+                        meta.props.onSyncFix?.(
+                          row.original.dependencyName,
+                          scheduledFix === v ? undefined : v
+                        );
+                      }
+                    }}
+                  >
+                    {v}
+                  </Button>
+                ))}
+              </div>
+            </div>
+          );
+        }
+      } else {
+        return null;
       }
     },
   }),

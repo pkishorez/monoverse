@@ -1,5 +1,5 @@
+import { cn } from "@components/utils";
 import { motion } from "framer-motion";
-import { cn } from "~/components/utils";
 
 export const Logo = ({
   className,
