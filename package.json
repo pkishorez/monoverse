@@ -30,6 +30,7 @@
     "dev:frontend": "vite",
     "dev:server": "npx tsx watch dev.ts",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "lint:tsc": "tsc --noEmit",
     "preview": "vite preview",
     "shadcn": "npx shadcn-ui@latest",
     "test": "vitest"
@@ -42,6 +43,7 @@
     "@vercel/speed-insights": "^1.0.11",
     "adm-zip": "^0.5.12",
     "cors": "^2.8.5",
+    "effect": "^3.5.3",
     "express": "^4.19.2",
     "semver": "^7.5.4",
     "sort-package-json": "^2.10.0",

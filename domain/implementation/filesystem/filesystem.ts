@@ -78,7 +78,7 @@ function getWorkspaceAtDir(dir: string) {
 
   try {
     const packageJson = JSON.parse(
-      fs.readFileSync(workspacePackageJson, "utf-8"),
+      fs.readFileSync(workspacePackageJson, "utf-8")
     );
     const parsedPackageJson = packageJsonSchema.parse(packageJson);
 

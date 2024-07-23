@@ -21,7 +21,7 @@ declare module "@tanstack/react-table" {
 export type Dependency = Exclude<
   TrpcRouterOutputs["getSyncUpdates"]["result"],
   null
->["outOfSyncDependencies"][number];
+>[number];
 
 const columnHelper = createColumnHelper<Dependency>();
 

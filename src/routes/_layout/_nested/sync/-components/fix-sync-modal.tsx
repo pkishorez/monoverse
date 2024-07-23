@@ -19,7 +19,7 @@ export const FixSyncDependency = ({
   onFix,
 }: {
   initialFixVersion?: string;
-  fixSyncInfo?: ReturnType<typeof getOutofSyncDependencies>[0];
+  fixSyncInfo?: ReturnType<typeof getOutofSyncDependencies>[0] | undefined;
   onFix: (versionRange?: string) => void;
 }) => {
   const [fixVersion, setFixVersion] = useState<string | undefined>(

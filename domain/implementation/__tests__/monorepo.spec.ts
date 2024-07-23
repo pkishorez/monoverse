@@ -18,7 +18,9 @@ describe("monorepo", () => {
     const monorepo = getMonorepoInfo(filePath);
 
     invariant(monorepo, "monorepo should be defined");
-    const monorepoWorkspaces = monorepo.workspaces.map((v) => v.name).sort();
+    const monorepoWorkspaces = monorepo.workspaces
+      .map((v) => v.workspace.name)
+      .sort();
 
     expect(monorepoWorkspaces).toStrictEqual(packages);
   });
@@ -37,7 +39,9 @@ describe("monorepo", () => {
     const monorepo = getMonorepoInfo(filePath);
 
     invariant(monorepo, "monorepo should be defined");
-    const monorepoWorkspaces = monorepo.workspaces.map((v) => v.name).sort();
+    const monorepoWorkspaces = monorepo.workspaces
+      .map(({ workspace }) => workspace.name)
+      .sort();
 
     expect(monorepoWorkspaces).toStrictEqual(packages);
   });
@@ -48,8 +52,8 @@ describe("monorepo", () => {
     const monorepo = getMonorepoInfo(filePath);
     invariant(monorepo, "monorepo should be defined");
 
-    expect(monorepo.workspaces.map((v) => v.name)).toStrictEqual([
-      "single-package",
-    ]);
+    expect(
+      monorepo.workspaces.map(({ workspace }) => workspace.name)
+    ).toStrictEqual(["single-package"]);
   });
 });

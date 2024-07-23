@@ -26,6 +26,9 @@ dependencies:
   cors:
     specifier: ^2.8.5
     version: 2.8.5
+  effect:
+    specifier: ^3.5.3
+    version: 3.5.3
   express:
     specifier: ^4.19.2
     version: 4.19.2
@@ -3797,6 +3800,10 @@ packages:
 
   /ee-first@1.1.1:
     resolution: {integrity: sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==}
+    dev: false
+
+  /effect@3.5.3:
+    resolution: {integrity: sha512-emKAbdsB4jTeppa6fdfdWGhbEjKdvr1xfltpGIwiR46mD97JvWlpbrTIdqDCCizuMbxVys6YrSjKL7aHHa93Gg==}
     dev: false
 
   /electron-to-chromium@1.4.726:
