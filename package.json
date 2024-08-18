@@ -21,7 +21,7 @@
   ],
   "scripts": {
     "build:frontend": "vite build --mode production",
-    "build:vercel-api": "tsup vercel/[trpc].ts --format esm --out-dir api --minify --treeshake",
+    "build:vercel-api": "tsup _api/[trpc].ts --format esm --out-dir api --minify --treeshake",
     "build:vercel": "npm run build:frontend && npm run build:vercel-api",
     "build:cli": "tsup cli.ts --format esm",
     "build": "npm run build:frontend && npm run build:cli",

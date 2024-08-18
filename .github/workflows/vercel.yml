@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - main
+      - feat/cleanup-vercel
 
 jobs:
   build:
