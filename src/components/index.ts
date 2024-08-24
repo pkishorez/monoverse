@@ -1,2 +1,2 @@
-export { Loading } from "./loading";
-export { Logo } from "./logo";
+export { Loading } from "./loading.tsx";
+export { Logo } from "./logo.tsx";

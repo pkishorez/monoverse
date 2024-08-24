@@ -1,4 +1,4 @@
-import { cn } from "@components/utils";
+import { cn } from "@components/utils.ts";
 import { motion } from "framer-motion";
 
 export const Logo = ({

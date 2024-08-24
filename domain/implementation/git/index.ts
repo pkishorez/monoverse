@@ -1,1 +1,1 @@
-export { downloadGitRepo } from "./clone";
+export { downloadGitRepo } from "./clone.ts";

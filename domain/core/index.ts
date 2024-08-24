@@ -2,10 +2,10 @@ export {
   packageJsonSchema,
   transformPackageJsonToWorkspace,
   transformToMonorepo,
-} from "./schema";
-export type { Monorepo, Workspace } from "./schema";
+} from "./schema/index.ts";
+export type { Monorepo, Workspace } from "./schema/index.ts";
 export {
   getMaxVersion,
   getMaxVersionFromRange,
   getMinVersionFromRange,
-} from "./version.js";
+} from "./version.ts";

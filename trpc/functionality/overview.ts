@@ -1,4 +1,4 @@
-import { getMonorepoInfo } from "~/domain";
+import { getMonorepoInfo } from "~/domain/index.ts";
 
 export const getOverview = (dirPath: string) => {
   const monorepoInfo = getMonorepoInfo(dirPath);
@@ -7,13 +7,10 @@ export const getOverview = (dirPath: string) => {
     return null;
   }
 
-  const workspacesMap = monorepoInfo.workspaces.reduce(
-    (acc, { workspace }) => {
-      acc[workspace.name] = workspace;
-      return acc;
-    },
-    {} as Record<string, (typeof monorepoInfo.workspaces)[0]["workspace"]>,
-  );
+  const workspacesMap = monorepoInfo.workspaces.reduce((acc, { workspace }) => {
+    acc[workspace.name] = workspace;
+    return acc;
+  }, {} as Record<string, (typeof monorepoInfo.workspaces)[0]["workspace"]>);
 
   const dependencyLinks = monorepoInfo.workspaces.map(({ workspace }) => {
     const internalDependencies = workspace.dependencies
@@ -27,7 +24,7 @@ export const getOverview = (dirPath: string) => {
   });
 
   const getDependencyType = (
-    workspace: string,
+    workspace: string
   ): "internal" | "leaf" | "standalone" => {
     const hasDecendants =
       dependencyLinks.find((v) => v.workspaceName === workspace)!

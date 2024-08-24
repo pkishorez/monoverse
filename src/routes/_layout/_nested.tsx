@@ -1,8 +1,8 @@
-import { Button } from "@components/ui/button";
+import { Button } from "@components/ui/button.tsx";
 import { Link, Outlet, createFileRoute } from "@tanstack/react-router";
 import { Sun } from "lucide-react";
-import { Logo } from "~/src/components";
-import { useStore } from "../../store";
+import { Logo } from "~/src/components/index.ts";
+import { useStore } from "../../store/index.ts";
 
 export const Route = createFileRoute("/_layout/_nested")({
   component: Layout,
@@ -22,6 +22,7 @@ function Layout() {
       </div>
       <div className="mt-10">
         <Link to="/overview">
+          {/* @ts-expect-error types? */}
           {({ isActive }) => (
             <Button variant={isActive ? "default" : "secondary"}>
               Overview
@@ -29,6 +30,7 @@ function Layout() {
           )}
         </Link>
         <Link to="/sync">
+          {/* @ts-expect-error types? */}
           {({ isActive }) => (
             <Button variant={isActive ? "default" : "secondary"}>Sync</Button>
           )}

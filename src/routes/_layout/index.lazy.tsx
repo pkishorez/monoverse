@@ -1,20 +1,20 @@
-import { Button } from "@components/ui/button";
+import { Button } from "@components/ui/button.tsx";
 import {
   Dialog,
   DialogContent,
   DialogFooter,
   DialogHeader,
   DialogOverlay,
-} from "@components/ui/dialog";
-import { Input } from "@components/ui/input";
-import { Label } from "@components/ui/label";
+} from "@components/ui/dialog.tsx";
+import { Input } from "@components/ui/input.tsx";
+import { Label } from "@components/ui/label.tsx";
 import { createLazyFileRoute, useRouter } from "@tanstack/react-router";
 import { CirclePlus, File, Info, Link, Trash2Icon } from "lucide-react";
 import { useMemo, useState } from "react";
 import invariant from "tiny-invariant";
-import { Logo } from "~/src/components";
-import { ENV } from "~/src/env";
-import { useStore } from "../../store";
+import { Logo } from "~/src/components/index.ts";
+import { ENV } from "~/src/env.ts";
+import { useStore } from "../../store/index.ts";
 
 export const Route = createLazyFileRoute("/_layout/")({
   component: Index,

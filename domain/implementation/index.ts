@@ -1,2 +1,2 @@
-export { getMonorepoInfo, syncDependencyVersions } from "./filesystem";
-export { downloadGitRepo } from "./git";
+export { getMonorepoInfo, syncDependencyVersions } from "./filesystem/index.ts";
+export { downloadGitRepo } from "./git/index.ts";

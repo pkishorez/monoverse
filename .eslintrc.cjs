@@ -21,7 +21,7 @@ module.exports = {
   },
   rules: {
     "import/no-internal-modules": [
-      "error",
+      "off",
       {
         allow: [
           "react-dom/client",

@@ -1,3 +1,3 @@
-export { getOverview } from "./overview";
-export { getSyncUpdates } from "./sync-updates";
-export { syncVersions } from "./sync-versions";
+export { getOverview } from "./overview.ts";
+export { getSyncUpdates } from "./sync-updates.ts";
+export { syncVersions } from "./sync-versions.ts";

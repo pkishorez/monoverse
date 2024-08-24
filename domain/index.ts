@@ -1,2 +1,2 @@
-export * from "./core";
-export * from "./implementation";
+export * from "./core/index.ts";
+export * from "./implementation/index.ts";

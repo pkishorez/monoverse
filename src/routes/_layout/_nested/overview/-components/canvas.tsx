@@ -1,7 +1,7 @@
-import { cn } from "@components/utils";
+import { cn } from "@components/utils.ts";
 import * as d3 from "d3";
 import { MutableRefObject, useMemo, useRef } from "react";
-import { ConnectorRef } from "./connector";
+import { ConnectorRef } from "./connector.tsx";
 
 interface Props {
   className?: string;

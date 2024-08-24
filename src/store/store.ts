@@ -2,7 +2,7 @@
 import { z } from "zod";
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
-import { StateType, initialState, stateValueSchema } from "./state";
+import { StateType, initialState, stateValueSchema } from "./state.ts";
 
 export const useStore = create<StateType>()(
   devtools(

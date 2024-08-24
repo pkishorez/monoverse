@@ -1,4 +1,4 @@
-import { getMonorepoInfo } from "~/domain";
+import { getMonorepoInfo } from "~/domain/index.ts";
 
 export const getSyncUpdates = (dirPath: string) => {
   const monorepoInfo = getMonorepoInfo(dirPath);
@@ -7,13 +7,10 @@ export const getSyncUpdates = (dirPath: string) => {
     return null;
   }
 
-  const workspaceMap = monorepoInfo.workspaces.reduce(
-    (acc, { workspace }) => {
-      acc[workspace.name] = true;
-      return acc;
-    },
-    {} as Record<string, boolean>,
-  );
+  const workspaceMap = monorepoInfo.workspaces.reduce((acc, { workspace }) => {
+    acc[workspace.name] = true;
+    return acc;
+  }, {} as Record<string, boolean>);
 
   return monorepoInfo.workspaces.flatMap(({ workspace }) => {
     return workspace.dependencies.map((dependency) => {

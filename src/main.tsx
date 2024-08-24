@@ -6,7 +6,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 // eslint-disable-next-line import/no-internal-modules
 import { SpeedInsights } from "@vercel/speed-insights/react";
-import { trpc } from "~/trpc/client";
+import { trpc } from "~/trpc/client.ts";
 
 const queryClient = new QueryClient();
 const trpcClient = trpc.createClient({
@@ -14,8 +14,8 @@ const trpcClient = trpc.createClient({
 });
 
 // Import the generated route tree
-import { ENV } from "./env";
-import { routeTree } from "./routeTree.gen";
+import { ENV } from "./env.ts";
+import { routeTree } from "./routeTree.gen.ts";
 
 // Create a new router instance
 const router = createRouter({ routeTree });
@@ -29,10 +29,11 @@ declare module "@tanstack/react-router" {
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     {import.meta.env.VITE_DEPLOYMENT_ENV === "vercel" && <SpeedInsights />}
+    {/* @ts-expect-error trpc types issue. */}
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
         <RouterProvider router={router} />
       </QueryClientProvider>
     </trpc.Provider>
-  </StrictMode>,
+  </StrictMode>
 );

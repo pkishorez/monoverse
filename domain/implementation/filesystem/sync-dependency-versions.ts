@@ -1,14 +1,14 @@
 import fs from "fs";
 import path from "path";
 import { sortPackageJson } from "sort-package-json";
-import { getMonorepoInfo } from "./filesystem";
+import { getMonorepoInfo } from "./filesystem.ts";
 
 export const syncDependencyVersions = (
   monorepoInfo: Exclude<ReturnType<typeof getMonorepoInfo>, undefined>,
   updates: {
     dependencyName: string;
     versionRange: string;
-  }[],
+  }[]
 ) => {
   try {
     const updatedWorkspaces: Set<string> = new Set();
@@ -41,7 +41,7 @@ export const syncDependencyVersions = (
       if (updatedWorkspaces.has(workspace.name)) {
         fs.writeFileSync(
           path.join(location, "package.json"),
-        sortPackageJson(JSON.stringify(packageJSON, null, 2)),
+          sortPackageJson(JSON.stringify(packageJSON, null, 2))
         );
       }
     }

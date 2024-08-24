@@ -3,12 +3,12 @@
     "target": "ES2020",
     "useDefineForClassFields": true,
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "module": "ESNext",
+    "module": "Node16",
     "skipLibCheck": true,
     "exactOptionalPropertyTypes": true,
 
     /* Bundler mode */
-    "moduleResolution": "Bundler",
+    "moduleResolution": "Node16",
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
@@ -27,9 +27,9 @@
       "@components/*": ["./src/components/*"]
     },
     "types": [
-      "./types/fixturez.d.ts",
+      "./src/types/fixturez.d.ts",
       "vitest/globals",
-      "./types/vite-env.d.ts"
+      "./src/types/vite-env.d.ts"
     ]
   },
   "include": ["src", "domain", "trpc", "components"],

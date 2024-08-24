@@ -1,6 +1,6 @@
 import { Schema as S } from "@effect/schema";
 import { Effect, pipe } from "effect";
-import { FetchError } from "../errors";
+import { FetchError } from "../errors.ts";
 
 const responseSchema = S.Struct({
   assets: S.Array(

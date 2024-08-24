@@ -1,8 +1,8 @@
 import { Outlet, createRootRoute } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 import { useEffect } from "react";
-import { ENV } from "../env";
-import { useStore } from "../store";
+import { ENV } from "../env.ts";
+import { useStore } from "../store/index.ts";
 
 export const Route = createRootRoute({
   component: RootComponent,

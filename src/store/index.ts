@@ -1,1 +1,1 @@
-export { store, useStore } from "./store";
+export { store, useStore } from "./store.ts";

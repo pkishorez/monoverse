@@ -1,7 +1,7 @@
 import fixtures from "fixturez";
 import path from "path";
 import invariant from "tiny-invariant";
-import { getMonorepoInfo } from "..";
+import { getMonorepoInfo } from "../index.ts";
 
 const f = fixtures(__dirname);
 

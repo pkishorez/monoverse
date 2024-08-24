@@ -1,4 +1,4 @@
-import { cn } from "@components/utils";
+import { cn } from "@components/utils.ts";
 
 export const Loading = ({ className = "" }) => {
   return (

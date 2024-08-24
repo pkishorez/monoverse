@@ -1,24 +1,23 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { useReward } from "react-rewards";
 
-import { Badge } from "@components/ui/badge";
-import { Button } from "@components/ui/button";
-import { Dialog, DialogOverlay } from "@components/ui/dialog";
-import { cn } from "@components/utils";
+import { Badge } from "@components/ui/badge.tsx";
+import { Button } from "@components/ui/button.tsx";
+import { Dialog, DialogOverlay } from "@components/ui/dialog.tsx";
+import { cn } from "@components/utils.ts";
 import { GroupingState } from "@tanstack/react-table";
 import { Info } from "lucide-react";
 import { useMemo, useState } from "react";
 import invariant from "tiny-invariant";
-import { Loading } from "~/src/components";
-import { ENV } from "~/src/env";
-import { store, useStore } from "~/src/store";
-import { TrpcRouterOutputs, trpc } from "~/trpc/client";
+import { Loading } from "~/src/components/index.ts";
+import { ENV } from "~/src/env.ts";
+import { store, useStore } from "~/src/store/index.ts";
+import { TrpcRouterOutputs, trpc } from "~/trpc/client.ts";
 import {
   DataTable,
-  FixSyncDependency,
   columns,
   getOutofSyncDependencies,
-} from "./-components";
+} from "./-components/index.ts";
 
 export const Route = createFileRoute("/_layout/_nested/sync/")({
   component: Sync,
@@ -207,26 +206,6 @@ const Loaded = ({
         onOpenChange={(open) => !open && setSelectedDependency(undefined)}
       >
         <DialogOverlay className="bg-background/90" />
-        <FixSyncDependency
-          key={fixSyncInfo ? "true" : "false"}
-          initialFixVersion={
-            scheduledSyncFixes[fixSyncInfo?.dependencyName ?? ""]
-          }
-          fixSyncInfo={fixSyncInfo}
-          onFix={(versionRange) => {
-            if (!fixSyncInfo) {
-              return;
-            }
-            if (versionRange) {
-              scheduledSyncFixes[fixSyncInfo.dependencyName] = versionRange;
-            } else {
-              delete scheduledSyncFixes[fixSyncInfo.dependencyName];
-            }
-
-            setScheduledSyncFixes({ ...scheduledSyncFixes });
-            setSelectedDependency(undefined);
-          }}
-        />
       </Dialog>
     </div>
   );

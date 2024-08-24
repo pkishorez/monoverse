@@ -1,4 +1,3 @@
-export { DataTable, columns } from "./data-table";
+export { DataTable, columns } from "./data-table/index.ts";
 
-export { FixSyncDependency } from "./fix-sync-modal";
-export { getOutofSyncDependencies } from "./utils";
+export { getOutofSyncDependencies } from "./utils.ts";

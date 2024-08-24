@@ -2,8 +2,8 @@ import { getPackages as getWorkspaces } from "@monorepo-utils/package-utils";
 import fs from "fs";
 import path from "path";
 import invariant from "tiny-invariant";
-import { packageJsonSchema } from "~/domain";
-import { transformPackageJsonToWorkspace } from "../../core";
+import { packageJsonSchema } from "~/domain/index.ts";
+import { transformPackageJsonToWorkspace } from "../../core/index.ts";
 
 export const getMonorepoInfo = (dirPath: string) => {
   const monorepoDir = detectMonorepoDir(dirPath);

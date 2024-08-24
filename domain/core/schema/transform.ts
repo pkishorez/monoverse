@@ -1,5 +1,5 @@
 import type { z } from "zod";
-import { removeUndefined } from "../../tools";
+import { removeUndefined } from "../../tools/index.ts";
 import {
   dependencySchema,
   packageJsonSchema,

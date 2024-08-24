@@ -1,17 +1,17 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
-import { cn } from "@components/utils";
+import { cn } from "@components/utils.ts";
 import { uniq } from "lodash-es";
 import { useRef, useState } from "react";
-import { Loading } from "~/src/components";
-import { store, useStore } from "~/src/store";
-import { trpc } from "~/trpc/client";
+import { Loading } from "~/src/components/index.ts";
+import { store, useStore } from "~/src/store/index.ts";
+import { trpc } from "~/trpc/client.ts";
 import {
   Canvas,
   Connector,
   ConnectorRef,
   transformOverviewData,
-} from "./-components";
+} from "./-components/index.ts";
 
 export const Route = createFileRoute("/_layout/_nested/overview/")({
   component: Overview,

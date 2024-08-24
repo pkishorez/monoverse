@@ -1,7 +1,11 @@
 import { z } from "zod";
-import { downloadGitRepo } from "~/domain";
-import { getOverview, getSyncUpdates, syncVersions } from "./functionality";
-import { publicProcedure, router } from "./setup";
+import { downloadGitRepo } from "~/domain/index.ts";
+import {
+  getOverview,
+  getSyncUpdates,
+  syncVersions,
+} from "./functionality/index.ts";
+import { publicProcedure, router } from "./setup.ts";
 
 export const appRouter = router({
   helloWorld: publicProcedure.query(async () => {
@@ -12,7 +16,7 @@ export const appRouter = router({
       z.object({
         type: z.union([z.literal("filepath"), z.literal("url")]),
         value: z.string(),
-      }),
+      })
     )
     .query(async ({ input }) => {
       const { type, value } = input;
@@ -42,7 +46,7 @@ export const appRouter = router({
       z.object({
         type: z.union([z.literal("filepath"), z.literal("url")]),
         value: z.string(),
-      }),
+      })
     )
     .query(async ({ input }) => {
       const { type, value } = input;
@@ -76,9 +80,9 @@ export const appRouter = router({
           z.object({
             dependencyName: z.string(),
             versionRange: z.string(),
-          }),
+          })
         ),
-      }),
+      })
     )
     .mutation(async ({ input }) => {
       const result = syncVersions(input.dirPath, input.updates);

@@ -1,20 +1,17 @@
-import { TrpcRouterOutputs } from "~/trpc/client";
+import { TrpcRouterOutputs } from "~/trpc/client.ts";
 
 export const transformOverviewData = (
   data: Exclude<
     Extract<TrpcRouterOutputs["getOverview"], { success: true }>["result"],
     null
-  >,
+  >
 ) => {
   type Workspace = (typeof data)[0];
 
-  const workspacesMap = data.reduce(
-    (acc, workspace) => {
-      acc[workspace.workspaceName] = workspace;
-      return acc;
-    },
-    {} as Record<string, Workspace>,
-  );
+  const workspacesMap = data.reduce((acc, workspace) => {
+    acc[workspace.workspaceName] = workspace;
+    return acc;
+  }, {} as Record<string, Workspace>);
 
   const standalone = data.filter((v) => v.type === "standalone");
   const leaf = data.filter((v) => v.type === "leaf");
@@ -30,14 +27,14 @@ export const transformOverviewData = (
     const currentLevel: Workspace[] = [];
 
     for (const internalDependency of prevLevel.flatMap(
-      (v) => v.internalDependencies,
+      (v) => v.internalDependencies
     )) {
       if (allInternalWorkspaces.includes(internalDependency)) {
         currentLevel.push(workspacesMap[internalDependency]);
 
         // Remove from internalDependencies to avoid duplicates
         allInternalWorkspaces = allInternalWorkspaces.filter(
-          (v) => v !== internalDependency,
+          (v) => v !== internalDependency
         );
       }
     }
@@ -61,7 +58,7 @@ export const transformOverviewData = (
     v.internalDependencies.map((id) => ({
       from: v.workspaceName,
       to: id,
-    })),
+    }))
   );
 
   const overview = [

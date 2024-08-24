@@ -1,9 +1,9 @@
 import { groupBy, uniq } from "lodash-es";
-import { Dependency } from "./data-table";
+import { Dependency } from "./data-table/index.ts";
 
 const dependencyGroups = (dependencies: Dependency[]) =>
   Object.entries(
-    groupBy(dependencies, (dependency) => dependency.dependencyName),
+    groupBy(dependencies, (dependency) => dependency.dependencyName)
   ).map(([dependencyName, dependencies]) => ({
     dependencyName,
     dependencies,
@@ -12,5 +12,5 @@ const dependencyGroups = (dependencies: Dependency[]) =>
 export const getOutofSyncDependencies = (dependencies: Dependency[]) =>
   dependencyGroups(dependencies).filter(
     ({ dependencies }) =>
-      uniq(dependencies.map((v) => v.versionRange)).length > 1,
+      uniq(dependencies.map((v) => v.versionRange)).length > 1
   );

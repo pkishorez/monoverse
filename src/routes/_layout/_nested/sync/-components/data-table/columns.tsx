@@ -1,12 +1,12 @@
 "use client";
 
-import { Badge } from "@components/ui/badge";
-import { Button } from "@components/ui/button";
-import { cn } from "@components/utils";
+import { Badge } from "@components/ui/badge.tsx";
+import { Button } from "@components/ui/button.tsx";
+import { cn } from "@components/utils.ts";
 import { createColumnHelper } from "@tanstack/react-table";
 import { uniq } from "lodash-es";
 import { Info } from "lucide-react";
-import { TrpcRouterOutputs } from "~/trpc/client";
+import { TrpcRouterOutputs } from "~/trpc/client.ts";
 
 declare module "@tanstack/react-table" {
   // @ts-expect-error - To avoid error.
