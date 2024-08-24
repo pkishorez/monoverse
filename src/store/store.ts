@@ -22,7 +22,7 @@ export const useStore = create<StateType>()(
               projects: {
                 ...get().projects,
                 list: get().projects.list.filter(
-                  (p) => p.value !== project.value,
+                  (p) => p.value !== project.value
                 ),
               },
             });
@@ -89,9 +89,9 @@ export const useStore = create<StateType>()(
           },
           removeItem: (name) => localStorage.removeItem(name),
         },
-      },
-    ),
-  ),
+      }
+    )
+  )
 );
 
 export const store = useStore;

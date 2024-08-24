@@ -21,8 +21,6 @@
   ],
   "scripts": {
     "build:frontend": "vite build --mode production",
-    "build:vercel-api": "tsup _api/[trpc].ts --format esm --out-dir api --minify --treeshake",
-    "build:vercel": "npm run build:frontend && npm run build:vercel-api",
     "build:cli": "tsup cli.ts --format esm",
     "build": "npm run build:frontend && npm run build:cli",
     "release": "npm run build",
@@ -36,6 +34,7 @@
     "test": "vitest"
   },
   "dependencies": {
+    "@effect/schema": "^0.71.0",
     "@monorepo-utils/package-utils": "^2.10.4",
     "@radix-ui/react-label": "^2.0.2",
     "@radix-ui/react-tabs": "^1.0.4",
