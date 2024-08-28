@@ -1,9 +1,14 @@
 import { Data } from "effect";
 
-export class FetchError extends Data.TaggedError("FetchError")<{
-  message?: string;
-}> {
-  constructor(message = "Failed to fetch") {
-    super({ message });
-  }
-}
+export const ErrorClass = (tag: string) =>
+  class extends Data.TaggedError(tag)<{
+    message?: string;
+    meta?: unknown;
+  }> {
+    constructor(message = "An error occurred", meta?: unknown) {
+      super({ message, meta });
+    }
+  };
+
+export class InvalidFilesystemPath extends ErrorClass("InvalidPath") {}
+export class FetchError extends ErrorClass("FetchError") {}

@@ -1,8 +1,8 @@
-import { Schema as S } from "@effect/schema";
+import { Schema as S, Schema } from "@effect/schema";
 import { Effect, pipe } from "effect";
-import { FetchError } from "../errors.ts";
+import { fetchJson } from "./utils.ts";
 
-const responseSchema = S.Struct({
+class BundleInfo extends Schema.Class<BundleInfo>("BundleInfo")({
   assets: S.Array(
     S.Struct({
       gzip: S.Number,
@@ -18,16 +18,12 @@ const responseSchema = S.Struct({
   description: S.optionalWith(S.String, {}),
   name: S.String,
   version: S.String,
-});
-const decodeResponse = S.decodeUnknownSync(responseSchema);
+}) {
+  public static decode = Schema.decodeUnknown(BundleInfo);
+}
 
-export const fetchBundleInfo = (packageName: string) =>
+export const getBundleInfo = (packageName: string) =>
   pipe(
-    Effect.tryPromise({
-      try: () =>
-        fetch(`https://bundlephobia.com/api/size?package=${packageName}`),
-      catch: () => new FetchError(`Failed to fetch ${packageName}`),
-    }),
-    Effect.map((response) => response.json()),
-    Effect.map(decodeResponse)
+    fetchJson(`https://bundlephobia.com/api/size?package=${packageName}`),
+    Effect.map(BundleInfo.decode)
   );

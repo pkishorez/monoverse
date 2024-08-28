@@ -15,6 +15,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Route as rootRoute } from './routes/__root'
 import { Route as LayoutImport } from './routes/_layout'
 import { Route as LayoutNestedImport } from './routes/_layout/_nested'
+import { Route as LayoutNestedTestImport } from './routes/_layout/_nested/test'
 import { Route as LayoutNestedSyncIndexImport } from './routes/_layout/_nested/sync/index'
 import { Route as LayoutNestedOverviewIndexImport } from './routes/_layout/_nested/overview/index'
 
@@ -39,6 +40,11 @@ const LayoutNestedRoute = LayoutNestedImport.update({
   getParentRoute: () => LayoutRoute,
 } as any)
 
+const LayoutNestedTestRoute = LayoutNestedTestImport.update({
+  path: '/test',
+  getParentRoute: () => LayoutNestedRoute,
+} as any)
+
 const LayoutNestedSyncIndexRoute = LayoutNestedSyncIndexImport.update({
   path: '/sync/',
   getParentRoute: () => LayoutNestedRoute,
@@ -54,22 +60,44 @@ const LayoutNestedOverviewIndexRoute = LayoutNestedOverviewIndexImport.update({
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
     '/_layout': {
+      id: '/_layout'
+      path: ''
+      fullPath: ''
       preLoaderRoute: typeof LayoutImport
       parentRoute: typeof rootRoute
     }
     '/_layout/_nested': {
+      id: '/_layout/_nested'
+      path: ''
+      fullPath: ''
       preLoaderRoute: typeof LayoutNestedImport
       parentRoute: typeof LayoutImport
     }
     '/_layout/': {
+      id: '/_layout/'
+      path: '/'
+      fullPath: '/'
       preLoaderRoute: typeof LayoutIndexLazyImport
       parentRoute: typeof LayoutImport
     }
+    '/_layout/_nested/test': {
+      id: '/_layout/_nested/test'
+      path: '/test'
+      fullPath: '/test'
+      preLoaderRoute: typeof LayoutNestedTestImport
+      parentRoute: typeof LayoutNestedImport
+    }
     '/_layout/_nested/overview/': {
+      id: '/_layout/_nested/overview/'
+      path: '/overview'
+      fullPath: '/overview'
       preLoaderRoute: typeof LayoutNestedOverviewIndexImport
       parentRoute: typeof LayoutNestedImport
     }
     '/_layout/_nested/sync/': {
+      id: '/_layout/_nested/sync/'
+      path: '/sync'
+      fullPath: '/sync'
       preLoaderRoute: typeof LayoutNestedSyncIndexImport
       parentRoute: typeof LayoutNestedImport
     }
@@ -78,14 +106,60 @@ declare module '@tanstack/react-router' {
 
 // Create and export the route tree
 
-export const routeTree = rootRoute.addChildren([
-  LayoutRoute.addChildren([
-    LayoutNestedRoute.addChildren([
+export const routeTree = rootRoute.addChildren({
+  LayoutRoute: LayoutRoute.addChildren({
+    LayoutNestedRoute: LayoutNestedRoute.addChildren({
+      LayoutNestedTestRoute,
       LayoutNestedOverviewIndexRoute,
       LayoutNestedSyncIndexRoute,
-    ]),
+    }),
     LayoutIndexLazyRoute,
-  ]),
-])
+  }),
+})
 
 /* prettier-ignore-end */
+
+/* ROUTE_MANIFEST_START
+{
+  "routes": {
+    "__root__": {
+      "filePath": "__root.tsx",
+      "children": [
+        "/_layout"
+      ]
+    },
+    "/_layout": {
+      "filePath": "_layout.tsx",
+      "children": [
+        "/_layout/_nested",
+        "/_layout/"
+      ]
+    },
+    "/_layout/_nested": {
+      "filePath": "_layout/_nested.tsx",
+      "parent": "/_layout",
+      "children": [
+        "/_layout/_nested/test",
+        "/_layout/_nested/overview/",
+        "/_layout/_nested/sync/"
+      ]
+    },
+    "/_layout/": {
+      "filePath": "_layout/index.lazy.tsx",
+      "parent": "/_layout"
+    },
+    "/_layout/_nested/test": {
+      "filePath": "_layout/_nested/test.tsx",
+      "parent": "/_layout/_nested"
+    },
+    "/_layout/_nested/overview/": {
+      "filePath": "_layout/_nested/overview/index.tsx",
+      "parent": "/_layout/_nested"
+    },
+    "/_layout/_nested/sync/": {
+      "filePath": "_layout/_nested/sync/index.tsx",
+      "parent": "/_layout/_nested"
+    }
+  }
+}
+ROUTE_MANIFEST_END */

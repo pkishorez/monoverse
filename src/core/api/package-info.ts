@@ -1,32 +1,33 @@
-import { z } from "zod";
-import { packageSchema } from "./schema.js";
+import { Schema } from "@effect/schema";
+import { Effect } from "effect";
+import { fetchJson } from "./utils.ts";
 
-const requestSchema = z.string();
-const responseSchema = z.object({
-  name: z.string(),
-  versions: z.record(z.any()),
-
-  description: z.string().optional(),
-  repository: z
-    .object({
-      url: z.string().optional(),
+class PackageInfo extends Schema.Class<PackageInfo>("PackageInfoSchema")({
+  name: Schema.String,
+  versions: Schema.transform(
+    Schema.Record({
+      key: Schema.String,
+      value: Schema.Any,
+    }),
+    Schema.Array(Schema.String),
+    {
+      decode: (record) => Object.keys(record),
+      encode: (v) => v,
+    }
+  ),
+  description: Schema.optional(Schema.String),
+  repository: Schema.optional(
+    Schema.Struct({
+      url: Schema.optional(Schema.String),
     })
-    .optional(),
-  licence: z.string().optional(),
-});
+  ),
+  licence: Schema.optional(Schema.String),
+}) {
+  public static decode = Schema.decodeUnknown(PackageInfo);
+}
 
-export const fetchPackageInfo = async (input: unknown) => {
-  const packageName = requestSchema.parse(input);
-  const response = await fetch(`https://registry.npmjs.org/${packageName}`);
-  const json = await response.json();
-
-  const pkg = responseSchema.parse(json);
-
-  return packageSchema.parse({
-    name: pkg.name,
-    versions: Object.keys(pkg.versions),
-    description: pkg.description,
-    repository: pkg.repository?.url,
-    licence: pkg.licence,
+export const getPackageInfo = (pkg: string) =>
+  Effect.gen(function* () {
+    const json = yield* fetchJson(`https://registry.npmjs.org/${pkg}`);
+    return yield* PackageInfo.decode(json);
   });
-};

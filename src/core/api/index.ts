@@ -1,2 +1,2 @@
-export { fetchBundleInfo } from "./bundlephobia.js";
-export { fetchPackageInfo } from "./package-info.js";
+export { getBundleInfo } from "./bundlephobia.js";
+export { getPackageInfo } from "./package-info.js";

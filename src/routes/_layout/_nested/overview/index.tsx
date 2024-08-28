@@ -2,7 +2,7 @@ import { createFileRoute, redirect } from "@tanstack/react-router";
 
 import { cn } from "@components/utils.ts";
 import { uniq } from "lodash-es";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Loading } from "~/src/components/index.ts";
 import { store, useStore } from "~/src/store/index.ts";
 import { trpc } from "~/trpc/client.ts";
@@ -35,6 +35,8 @@ function Overview() {
       refetchOnReconnect: false,
     }
   );
+
+  useEffect(() => {}, []);
   const connectorRefMap = useRef<Record<string, ConnectorRef>>({});
   const [selected, setSelected] = useState<string[]>([]);
 

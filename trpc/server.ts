@@ -1,5 +1,7 @@
+import { Effect } from "effect";
 import { z } from "zod";
 import { downloadGitRepo } from "~/domain/index.ts";
+import { getRepoInfo } from "~/src/core/index.ts";
 import {
   getOverview,
   getSyncUpdates,
@@ -11,6 +13,16 @@ export const appRouter = router({
   helloWorld: publicProcedure.query(async () => {
     return "Hello, World!";
   }),
+  getRepoInfo: publicProcedure
+    .input(
+      z.object({
+        type: z.union([z.literal("filepath"), z.literal("url")]),
+        value: z.string(),
+      })
+    )
+    .query(async ({ input }) => {
+      return Effect.runPromise(getRepoInfo(input.value));
+    }),
   getOverview: publicProcedure
     .input(
       z.object({
